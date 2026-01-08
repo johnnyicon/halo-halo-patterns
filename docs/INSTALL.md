@@ -1,6 +1,6 @@
 # Install into a consuming repository
 
-## Method 1: Prompt-Orchestrated Install (Recommended)
+## Method 1: Prompt-Orchestrated (Recommended for ongoing use)
 
 ```bash
 # 1. Add catalog as submodule
@@ -12,12 +12,14 @@ git submodule update --init --recursive
 ```
 
 The wizard will:
-- Run the install script automatically
+- Guide you through running the install script (may require approval)
 - Verify the installation
 - Handle edge cases with existing instructions
 - Report any issues
 
-## Method 2: Script-Only Install
+**Note:** First-time install requires running the script to copy prompts. After that, the wizard prompt will be available for updates.
+
+## Method 2: Direct Script Install (Always works)
 
 ```bash
 # 1. Add catalog as submodule
@@ -31,6 +33,11 @@ bash .patterns/catalog/scripts/install.sh .
 git add .gitmodules .patterns .github .gitignore
 git commit -m "Add Halo-Halo patterns catalog"
 ```
+
+This method:
+- Always works (no tool permissions needed)
+- Good for CI/automation
+- Script handles everything deterministically
 
 ## What the install script does
 

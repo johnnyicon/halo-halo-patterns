@@ -15,21 +15,23 @@ You are installing/updating the Halo-Halo Patterns Catalog into this repository.
 
 ## Step 1: Run Installer Script
 
-**Execute the install script:**
+**Run the install script** (you may need to approve execution):
 ```bash
 bash .patterns/catalog/scripts/install.sh .
 ```
 
-**What this does:**
+If you cannot execute directly, **instruct the user to run it** and wait for their confirmation.
+
+**What this script does:**
 - Copies Halo prompts/agents to `.github/prompts/halo/` and `.github/agents/halo/`
 - Creates `.patterns/local/{cases,scratch}`
 - Adds `.patterns/local/**` to `.gitignore` (idempotent)
 - Merges Halo instructions into `copilot-instructions.md` using marker blocks
 
-**Capture and report:**
-- Script output
-- Any errors or warnings
+**After execution, capture:**
+- Script output/errors
 - Files created/modified
+- Any warnings
 
 ## Step 2: Verify Instructions Merge
 
