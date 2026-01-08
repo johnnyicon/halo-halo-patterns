@@ -1,0 +1,25 @@
+name: Patterns checks (consuming repo)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  patterns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Validate catalog (submodule)
+        run: |
+          if [ -d ".patterns/catalog" ]; then
+            cd .patterns/catalog
+            npm ci
+            npm run validate
+          else
+            echo "No .patterns/catalog submodule found."
+          fi

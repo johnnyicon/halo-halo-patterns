@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "routing": {
+    "add_to_catalog_min_score": 8,
+    "keep_local_min_score": 5
+  },
+  "deterministic_caps": [
+    {
+      "if_missing_section": "Verification checklist",
+      "max_total_score": 6
+    },
+    {
+      "if_missing_front_matter_field": "frameworks",
+      "route": "local_only"
+    },
+    {
+      "if_missing_framework_versions": true,
+      "route": "local_only"
+    },
+    {
+      "if_sanitization_block_matches": true,
+      "route": "local_only"
+    }
+  ],
+  "similarity_triggers_consolidate": {
+    "same_domain_and_tag_overlap": {
+      "min_tag_overlap": 3
+    },
+    "or_title_levenshtein_ratio": 0.7
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "statuses": [
+    "draft",
+    "validated",
+    "deprecated"
+  ],
+  "validated_requirements": {
+    "min_body_chars": 500,
+    "required_sections_by_type": {
+      "troubleshooting": [
+        "Context",
+        "Symptoms",
+        "Root cause",
+        "Fix",
+        "Verification checklist"
+      ],
+      "implementation": [
+        "Context",
+        "Usage",
+        "Tradeoffs",
+        "Verification checklist"
+      ],
+      "architecture": [
+        "Context",
+        "Decision",
+        "Tradeoffs",
+        "When to use",
+        "When not to use"
+      ],
+      "anti-pattern": [
+        "Context",
+        "Why this fails",
+        "What to do instead",
+        "Detection"
+      ]
+    },
+    "required_front_matter_fields": [
+      "maintainers",
+      "review_by",
+      "last_verified"
+    ]
+  },
+  "search_defaults": {
+    "exclude_statuses": [
+      "deprecated"
+    ]
+  }
+}
