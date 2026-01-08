@@ -1,13 +1,30 @@
 # Install into a consuming repository
 
-## Quick start
+## Method 1: Prompt-Orchestrated Install (Recommended)
 
 ```bash
 # 1. Add catalog as submodule
 git submodule add https://github.com/johnnyicon/halo-halo-patterns.git .patterns/catalog
 git submodule update --init --recursive
 
-# 2. Run install script to wire up templates
+# 2. Run install wizard in GitHub Copilot Chat
+/halo-install-wizard
+```
+
+The wizard will:
+- Run the install script automatically
+- Verify the installation
+- Handle edge cases with existing instructions
+- Report any issues
+
+## Method 2: Script-Only Install
+
+```bash
+# 1. Add catalog as submodule
+git submodule add https://github.com/johnnyicon/halo-halo-patterns.git .patterns/catalog
+git submodule update --init --recursive
+
+# 2. Run install script directly
 bash .patterns/catalog/scripts/install.sh .
 
 # 3. Commit the changes

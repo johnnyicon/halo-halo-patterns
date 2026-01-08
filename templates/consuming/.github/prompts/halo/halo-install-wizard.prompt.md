@@ -1,82 +1,121 @@
 ---
-description: Halo Install Wizard — smart merge of Halo instructions into existing Copilot config
+description: Halo Install Wizard — automated installation with smart merge verification
 ---
 
 You are installing/updating the Halo-Halo Patterns Catalog into this repository.
 
-## Step 0: Locate Existing Instructions
+## Step 0: Pre-Flight Check
 
-Check for existing Copilot instruction files:
-- `.github/copilot-instructions.md` (standard location)
-- `.github/instructions/*.md` (alternative)
-- `docs/ai/*.md` (alternative)
-- Any other custom instruction files
+1. Verify `.patterns/catalog/` submodule exists (if not, user must add it first)
+2. Locate existing Copilot instruction files:
+   - `.github/copilot-instructions.md` (standard)
+   - `.github/instructions/*.md` (alternative)
+   - `docs/ai/*.md` (alternative)
+3. Read existing instructions to understand structure/style
 
-Identify which file(s) are authoritative for this repo.
+## Step 1: Run Installer Script
 
-## Step 1: Run Installer
+**Execute the install script:**
+```bash
+bash .patterns/catalog/scripts/install.sh .
+```
 
-Execute: `bash .patterns/catalog/scripts/install.sh .`
+**What this does:**
+- Copies Halo prompts/agents to `.github/prompts/halo/` and `.github/agents/halo/`
+- Creates `.patterns/local/{cases,scratch}`
+- Adds `.patterns/local/**` to `.gitignore` (idempotent)
+- Merges Halo instructions into `copilot-instructions.md` using marker blocks
 
-This will:
-- Copy Halo prompts/agents to `.github/`
-- Create `.patterns/local/{cases,scratch}`
-- Add gitignore block
-- **Attempt safe merge** into `copilot-instructions.md`
+**Capture and report:**
+- Script output
+- Any errors or warnings
+- Files created/modified
 
 ## Step 2: Verify Instructions Merge
 
-Check `.github/copilot-instructions.md` for the Halo block:
+Read `.github/copilot-instructions.md` and check:
+
+**Look for the Halo marker block:**
 ```markdown
 <!-- halo-halo:start version=0.1 -->
 ... Halo instructions ...
 <!-- halo-halo:end -->
 ```
 
-**If merge looks good:**
-- Confirm the Halo section doesn't conflict with existing rules
-- Check formatting/readability
-- Done!
+**Verification checklist:**
+- [ ] Marker block present and complete
+- [ ] No conflicts with existing repo rules
+- [ ] Formatting is clean and readable
+- [ ] Halo section is in appropriate location (not breaking flow)
 
-**If there are conflicts or the file has unusual structure:**
+**If issues found:**
 - Read `.github/halo-halo.instructions.snippet.md`
-- Manually place the Halo block in the most appropriate section
-- Preserve all existing instructions
-- Add compatibility notes if rules conflict
+- Manually adjust placement/formatting
+- Resolve any rule conflicts (document compatibility notes)
+- Never delete existing instructions
 
-## Step 3: Verify Installation
+## Step 3: Verify File Structure
 
-Confirm these exist:
-- ✅ `.patterns/catalog/` (git submodule)
-- ✅ `.patterns/local/cases/` and `.patterns/local/scratch/`
-- ✅ `.github/prompts/halo/halo-{search,apply,gatekeeper}.prompt.md`
+Confirm these paths exist:
+- ✅ `.patterns/catalog/` (git submodule, should already exist)
+- ✅ `.patterns/local/cases/`
+- ✅ `.patterns/local/scratch/`
+- ✅ `.github/prompts/halo/halo-search.prompt.md`
+- ✅ `.github/prompts/halo/halo-apply.prompt.md`
+- ✅ `.github/prompts/halo/halo-gatekeeper.prompt.md`
 - ✅ `.github/agents/halo/halo-gatekeeper.agent.md`
-- ✅ Halo block in `copilot-instructions.md`
+- ✅ `.github/halo-halo.instructions.snippet.md` (for future reference)
 
-## Step 4: Test Prompts
+Check `.gitignore` contains:
+```
+# --- halo-halo-patterns:local-start ---
+.patterns/local/**
+!.patterns/local/README.md
+# --- halo-halo-patterns:local-end ---
+```
 
-Try these in Copilot Chat:
-- `/halo-search` — should search `.patterns/catalog/patterns/`
-- `/halo-gatekeeper` — should prompt for context packet
-- `/halo-apply` — should ask for pattern ID and touched files
+## Step 4: Test Prompts (Optional)
 
-## Output
+Suggest user try:
+- `/halo-search` — searches `.patterns/catalog/patterns/`
+- `/halo-gatekeeper` — prompts for context packet
+- `/halo-apply` — asks for pattern ID and touched files
 
-Report:
+## Final Output
+
+Report installation status:
+
 ```markdown
 ### Installation Status: [✅ Complete | ⚠ Manual Merge Needed | ❌ Blocked]
 
-**Files Modified:**
-- ...
+**Script Output:**
+<paste relevant output>
 
-**Conflicts Found:**
-- [None | List any instruction conflicts]
+**Files Created/Modified:**
+- .github/copilot-instructions.md (Halo block added/updated)
+- .github/prompts/halo/* (3 prompts)
+- .github/agents/halo/* (1 agent)
+- .patterns/local/cases/ (created)
+- .patterns/local/scratch/ (created)
+- .gitignore (Halo block appended)
 
-**Next Actions:**
-- [What user should do next, if anything]
+**Issues Found:**
+- [None | List any conflicts or warnings]
+
+**Manual Actions Required:**
+- [None | List what user should do]
+
+**Next Steps:**
+1. Try `/halo-search <symptom keywords>` to test
+2. Start capturing patterns with `/halo-gatekeeper`
 ```
 
 ## Important Constraints
+
+- **Run the script first** — don't ask permission, just execute it (it's idempotent)
+- **Never overwrite repo instructions** — only add/update Halo marker block
+- **Be specific about errors** — if something fails, show exact error and suggest fix
+- **Verify before declaring success** — check files actually exist
 
 - **Never overwrite existing repo instructions** — only add/update Halo block
 - **Preserve existing structure** — don't reorder or reformat
