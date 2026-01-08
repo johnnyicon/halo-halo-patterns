@@ -18,17 +18,17 @@ git commit -m "Add Halo-Halo patterns catalog"
 ## What the install script does
 
 - Creates `.patterns/local/cases/` and `.patterns/local/scratch/`
-- Copies GitHub Copilot prompts/agents to `.github/`
+- Copies Halo Copilot prompts/agents to `.github/prompts/halo/` and `.github/agents/halo/`
 - Adds `.patterns/local/` to `.gitignore` (idempotent, won't duplicate)
 - Creates a README in `.patterns/local/`
 
-## Using patterns
+## Using Halo patterns
 
 Once installed:
 
-1. Use `/patterns-search` in GitHub Copilot Chat to search the catalog
-2. Use `/patterns-apply` to apply a pattern to your code
-3. Use `/patterns-gatekeeper` when creating new local patterns
+1. Use `/halo-search` in GitHub Copilot Chat to search the catalog
+2. Use `/halo-apply` to apply a pattern to your code
+3. Use `/halo-gatekeeper` when creating new local patterns
 
 ## Updating the catalog
 

@@ -15,11 +15,12 @@ echo "Installing Halo-Halo patterns into: $TARGET"
 mkdir -p "$TARGET/.patterns/local/cases"
 mkdir -p "$TARGET/.patterns/local/scratch"
 
-# Copy GitHub templates (prompts, agents, instructions)
-mkdir -p "$TARGET/.github"
+# Copy GitHub templates (halo-prefixed prompts, agents, instructions)
+mkdir -p "$TARGET/.github/prompts/halo" "$TARGET/.github/agents/halo"
 if [ -d "$TEMPLATES/.github" ]; then
   cp -R "$TEMPLATES/.github/"* "$TARGET/.github/" 2>/dev/null || true
 fi
+echo "✓ Installed Halo Copilot prompts and agents to .github/"
 
 # Add gitignore block (idempotent - won't duplicate)
 GITIGNORE="$TARGET/.gitignore"
@@ -61,6 +62,6 @@ echo ""
 echo "✅ Installation complete!"
 echo ""
 echo "Next steps:"
-echo "  1. Review .github/copilot-instructions.md"
-echo "  2. Try the /patterns-search prompt in GitHub Copilot Chat"
-echo "  3. Add your first case using templates/consuming/.patterns/local/cases/CASE.template.md"
+echo "  1. Review .github/halo-copilot-instructions.md"
+echo "  2. Try the /halo-search prompt in GitHub Copilot Chat"
+echo "  3. Add your first case to .patterns/local/cases/"
