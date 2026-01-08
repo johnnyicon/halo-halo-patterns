@@ -7,4 +7,4 @@ tools:
 infer: true
 ---
 
-Search `.patterns/catalog/patterns/` first. Draft patterns using `.patterns/catalog/docs/TEMPLATE.md`.
+Search `.halo-halo/upstream/patterns/` first. Draft patterns using `.halo-halo/upstream/docs/TEMPLATE.md`.

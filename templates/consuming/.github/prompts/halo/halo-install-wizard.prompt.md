@@ -6,7 +6,7 @@ You are installing/updating the Halo-Halo Patterns Catalog into this repository.
 
 ## Step 0: Pre-Flight Check
 
-1. Verify `.patterns/catalog/` submodule exists (if not, user must add it first)
+1. Verify `.halo-halo/upstream/` submodule exists (if not, user must add it first)
 2. Locate existing Copilot instruction files:
    - `.github/copilot-instructions.md` (standard)
    - `.github/instructions/*.md` (alternative)
@@ -17,15 +17,15 @@ You are installing/updating the Halo-Halo Patterns Catalog into this repository.
 
 **Run the install script** (you may need to approve execution):
 ```bash
-bash .patterns/catalog/scripts/install.sh .
+bash .halo-halo/upstream/scripts/install.sh .
 ```
 
 If you cannot execute directly, **instruct the user to run it** and wait for their confirmation.
 
 **What this script does:**
 - Copies Halo prompts/agents to `.github/prompts/halo/` and `.github/agents/halo/`
-- Creates `.patterns/local/{cases,scratch}`
-- Adds `.patterns/local/**` to `.gitignore` (idempotent)
+- Creates `.halo-halo/local/{cases,scratch}`
+- Adds `.halo-halo/local/**` to `.gitignore` (idempotent)
 - Merges Halo instructions into `copilot-instructions.md` using marker blocks
 
 **After execution, capture:**
@@ -59,9 +59,9 @@ Read `.github/copilot-instructions.md` and check:
 ## Step 3: Verify File Structure
 
 Confirm these paths exist:
-- ✅ `.patterns/catalog/` (git submodule, should already exist)
-- ✅ `.patterns/local/cases/`
-- ✅ `.patterns/local/scratch/`
+- ✅ `.halo-halo/upstream/` (git submodule, should already exist)
+- ✅ `.halo-halo/local/cases/`
+- ✅ `.halo-halo/local/scratch/`
 - ✅ `.github/prompts/halo/halo-search.prompt.md`
 - ✅ `.github/prompts/halo/halo-apply.prompt.md`
 - ✅ `.github/prompts/halo/halo-gatekeeper.prompt.md`
@@ -71,15 +71,15 @@ Confirm these paths exist:
 Check `.gitignore` contains:
 ```
 # --- halo-halo-patterns:local-start ---
-.patterns/local/**
-!.patterns/local/README.md
+.halo-halo/local/**
+!.halo-halo/local/README.md
 # --- halo-halo-patterns:local-end ---
 ```
 
 ## Step 4: Test Prompts (Optional)
 
 Suggest user try:
-- `/halo-search` — searches `.patterns/catalog/patterns/`
+- `/halo-search` — searches `.halo-halo/upstream/patterns/`
 - `/halo-gatekeeper` — prompts for context packet
 - `/halo-apply` — asks for pattern ID and touched files
 
@@ -97,8 +97,8 @@ Report installation status:
 - .github/copilot-instructions.md (Halo block added/updated)
 - .github/prompts/halo/* (3 prompts)
 - .github/agents/halo/* (1 agent)
-- .patterns/local/cases/ (created)
-- .patterns/local/scratch/ (created)
+- .halo-halo/local/cases/ (created)
+- .halo-halo/local/scratch/ (created)
 - .gitignore (Halo block appended)
 
 **Issues Found:**

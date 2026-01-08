@@ -15,7 +15,7 @@ If critical info is missing, ask for **one clarifying detail** (not multiple).
 
 ## Step 2: Search Catalog
 
-Search `.patterns/catalog/patterns/` recursively:
+Search `.halo-halo/upstream/patterns/` recursively:
 - Match by: symptoms keywords, domain, tags, framework, runtime
 - Prefer `status: validated` over `draft`
 - Exclude `deprecated: true` unless user asks

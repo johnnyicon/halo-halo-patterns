@@ -3,7 +3,7 @@
 ## Pattern-First Debugging
 
 When you see an error, unexpected behavior, or an architectural decision:
-1) Search `.patterns/catalog/patterns/` before proposing fixes.
+1) Search `.halo-halo/upstream/patterns/` before proposing fixes.
 2) Prefer applying an existing validated pattern.
 3) Focus on **touched files** (changed/staged files) rather than scanning the whole repo.
 

@@ -4,7 +4,7 @@
 
 ```bash
 # 1. Add catalog as submodule
-git submodule add https://github.com/johnnyicon/halo-halo-patterns.git .patterns/catalog
+git submodule add https://github.com/johnnyicon/halo-halo-patterns.git .halo-halo/upstream
 git submodule update --init --recursive
 
 # 2. Run install wizard in GitHub Copilot Chat
@@ -23,14 +23,14 @@ The wizard will:
 
 ```bash
 # 1. Add catalog as submodule
-git submodule add https://github.com/johnnyicon/halo-halo-patterns.git .patterns/catalog
+git submodule add https://github.com/johnnyicon/halo-halo-patterns.git .halo-halo/upstream
 git submodule update --init --recursive
 
 # 2. Run install script directly
-bash .patterns/catalog/scripts/install.sh .
+bash .halo-halo/upstream/scripts/install.sh .
 
 # 3. Commit the changes
-git add .gitmodules .patterns .github .gitignore
+git add .gitmodules .halo-halo .github .gitignore
 git commit -m "Add Halo-Halo patterns catalog"
 ```
 
@@ -41,10 +41,10 @@ This method:
 
 ## What the install script does
 
-- Creates `.patterns/local/cases/` and `.patterns/local/scratch/`
+- Creates `.halo-halo/local/cases/` and `.halo-halo/local/scratch/`
 - Copies Halo Copilot prompts/agents to `.github/prompts/halo/` and `.github/agents/halo/`
-- Adds `.patterns/local/` to `.gitignore` (idempotent, won't duplicate)
-- Creates a README in `.patterns/local/`
+- Adds `.halo-halo/local/` to `.gitignore` (idempotent, won't duplicate)
+- Creates a README in `.halo-halo/local/`
 
 ## Using Halo patterns
 
@@ -58,10 +58,10 @@ Once installed:
 
 ```bash
 # Pull latest patterns
-git submodule update --remote --merge .patterns/catalog
+git submodule update --remote --merge .halo-halo/upstream
 
 # Re-run install script if prompts/templates changed
-bash .patterns/catalog/scripts/install.sh .
+bash .halo-halo/upstream/scripts/install.sh .
 ```
 
 ## Manual setup (if you prefer)

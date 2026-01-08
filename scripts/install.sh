@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Halo-Halo Patterns: Install script for consuming repositories
-# Usage: bash .patterns/catalog/scripts/install.sh [TARGET_DIR]
+# Usage: bash .halo-halo/upstream/scripts/install.sh [TARGET_DIR]
 
 TARGET="${1:-.}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,8 +13,8 @@ HALO_VERSION="0.1"
 echo "Installing Halo-Halo patterns into: $TARGET"
 
 # Create local directories for cases and scratch
-mkdir -p "$TARGET/.patterns/local/cases"
-mkdir -p "$TARGET/.patterns/local/scratch"
+mkdir -p "$TARGET/.halo-halo/local/cases"
+mkdir -p "$TARGET/.halo-halo/local/scratch"
 
 # Copy GitHub templates (halo-prefixed prompts, agents)
 mkdir -p "$TARGET/.github/prompts/halo" "$TARGET/.github/agents/halo"
@@ -77,17 +77,17 @@ if ! grep -q "$BLOCK_START" "$GITIGNORE" 2>/dev/null; then
   cat >> "$GITIGNORE" <<EOF
 
 $BLOCK_START
-.patterns/local/**
-!.patterns/local/README.md
+.halo-halo/local/**
+!.halo-halo/local/README.md
 $BLOCK_END
 EOF
-  echo "✓ Added .patterns/local to .gitignore"
+  echo "✓ Added .halo-halo/local to .gitignore"
 else
   echo "✓ .gitignore already configured"
 fi
 
 # Create local README if it doesn't exist
-LOCAL_README="$TARGET/.patterns/local/README.md"
+LOCAL_README="$TARGET/.halo-halo/local/README.md"
 if [ ! -f "$LOCAL_README" ]; then
   cat > "$LOCAL_README" <<'EOF'
 # Local Patterns
@@ -99,7 +99,7 @@ This directory is for project-specific patterns and cases.
 
 **Do not commit sensitive information** (API keys, credentials, PII, etc.)
 EOF
-  echo "✓ Created .patterns/local/README.md"
+  echo "✓ Created .halo-halo/local/README.md"
 fi
 
 echo ""
@@ -110,4 +110,5 @@ echo "  1. Review .github/copilot-instructions.md (Halo block added)"
 echo "  2. Try /halo-search in GitHub Copilot Chat"
 echo "  3. Run /halo-install-wizard for advanced setup"
 echo ""
-echo "For manual merge: cat .github/halo-halo.instructions.snippet.md"
+echo "Patterns location: .halo-halo/upstream/patterns/"
+echo "Local cases: .halo-halo/local/cases/"

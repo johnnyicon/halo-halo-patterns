@@ -16,10 +16,10 @@ jobs:
           node-version: 20
       - name: Validate catalog (submodule)
         run: |
-          if [ -d ".patterns/catalog" ]; then
-            cd .patterns/catalog
+          if [ -d \".halo-halo/upstream\" ]; then
+            cd .halo-halo/upstream
             npm ci
             npm run validate
           else
-            echo "No .patterns/catalog submodule found."
+            echo \"No .halo-halo/upstream submodule found.\"
           fi

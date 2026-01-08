@@ -17,7 +17,7 @@ You are applying a Halo pattern to this repository.
 
 ## Step 2: Read Pattern
 
-Retrieve the pattern from `.patterns/catalog/patterns/`.
+Retrieve the pattern from `.halo-halo/upstream/patterns/`.
 Extract:
 - Root cause
 - Fix approach

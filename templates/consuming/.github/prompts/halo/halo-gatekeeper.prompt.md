@@ -20,7 +20,7 @@ Extract from the current conversation:
 
 ## Step 2: Dedupe Against Catalog
 
-Search `.patterns/catalog/patterns/` for similar patterns by:
+Search `.halo-halo/upstream/patterns/` for similar patterns by:
 - Keywords from symptoms/fix
 - Domain, tags, framework
 - Root cause type
@@ -33,12 +33,12 @@ Identify: exact match, close match, or novel.
 - Propose update to existing pattern (show diff with new nuance)
 
 **If reusable (novel):**
-- Create new pattern draft using `.patterns/catalog/docs/TEMPLATE.md`
+- Create new pattern draft using `.halo-halo/upstream/docs/TEMPLATE.md`
 - Fill all required front matter fields
 - Write structured body with Context, Symptoms, Root Cause, Fix, Verification, Tradeoffs
 
 **If too specific/one-off:**
-- Create local case file for `.patterns/local/cases/YYYY-MM-DD-slug.md`
+- Create local case file for `.halo-halo/local/cases/YYYY-MM-DD-slug.md`
 - Include date, app name, resolution status
 
 ## Step 4: Sanitize
@@ -65,7 +65,7 @@ Replace with placeholders: `<DOMAIN>`, `<API_KEY>`, `<CLIENT>`, etc.
 [CATALOG | LOCAL | CONSOLIDATE]: <rationale>
 
 ### Proposed File
-Path: `.patterns/catalog/patterns/.../pattern-id.md` OR `.patterns/local/cases/...`
+Path: `.halo-halo/upstream/patterns/.../pattern-id.md` OR `.halo-halo/local/cases/...`
 
 <full markdown content here>
 ```
