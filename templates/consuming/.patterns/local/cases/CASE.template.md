@@ -1,5 +1,5 @@
 ---
-date: 2026-01-08
+date: <YYYY-MM-DD>
 app: <APP_NAME>
 area: <AREA>
 domain: indexing

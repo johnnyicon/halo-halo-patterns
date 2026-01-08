@@ -42,17 +42,35 @@ Apps that mutate backend data but rely on an indexing/caching layer for reads.
 - Refresh fixes it only after a delay
 
 ## Root cause
-Invalidation path is missing or delayed between mutation and the read model.
+Invalidation path is missing or delayed between mutation and the read model. Common scenarios include:
+- Mutations bypass the cache invalidation layer entirely
+- Async indexing introduces eventual consistency gaps
+- Cache keys don't match between write and read paths
+- Stale-while-revalidate strategies delay propagation
 
 ## Fix
-1. Ensure mutations publish an invalidation signal.
-2. Revalidate cache/route after mutation.
-3. Add a temporary “read-your-writes” bypass if indexing is async.
+1. Ensure mutations publish an invalidation signal (e.g., cache tags, event bus).
+2. Revalidate cache/route after mutation using `revalidatePath()` or `revalidateTag()`.
+3. Add a temporary "read-your-writes" bypass if indexing is async.
+4. Use optimistic UI updates to mask latency.
+
+Example for Next.js:
+```typescript
+'use server'
+import { revalidateTag } from 'next/cache'
+
+export async function updateItem(id: string, data: any) {
+  await db.items.update(id, data)
+  revalidateTag(`item-${id}`)
+}
+```
 
 ## Verification checklist
-- [ ] Reproduce before fix
+- [ ] Reproduce before fix (document steps)
 - [ ] Confirm UI updates immediately after mutation
-- [ ] Add a regression check
+- [ ] Test with network delay/throttling
+- [ ] Verify cache headers in browser DevTools
+- [ ] Add a regression check (E2E test)
 
 ## Tradeoffs
 More invalidations reduces cache hit-rate.
