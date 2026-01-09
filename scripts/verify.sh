@@ -61,13 +61,7 @@ fi
 # Check instructions snippet
 echo ""
 echo "Checking instructions..."
-if [ -f "$TARGET/.github/halo-halo.instructions.snippet.md" ]; then
-  echo "  ✅ .github/halo-halo.instructions.snippet.md"
-else
-  echo "  ❌ .github/halo-halo.instructions.snippet.md (missing)"
-  ERRORS=$((ERRORS + 1))
-fi
-
+# Note: snippet file is only in upstream, not copied to consuming repo
 # Check copilot-instructions.md has Halo block
 if [ -f "$TARGET/.github/copilot-instructions.md" ]; then
   if grep -q "<!-- halo-halo:start" "$TARGET/.github/copilot-instructions.md" 2>/dev/null; then

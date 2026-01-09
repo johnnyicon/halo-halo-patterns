@@ -16,10 +16,21 @@ echo "Installing Halo-Halo patterns into: $TARGET"
 mkdir -p "$TARGET/.halo-halo/local/cases"
 mkdir -p "$TARGET/.halo-halo/local/scratch"
 
-# Copy GitHub templates (halo-prefixed prompts, agents)
-mkdir -p "$TARGET/.github/prompts/halo" "$TARGET/.github/agents/halo"
+# Copy GitHub templates (halo-prefixed prompts, agents, workflows)
+mkdir -p "$TARGET/.github/prompts/halo" "$TARGET/.github/agents/halo" "$TARGET/.github/workflows"
 if [ -d "$TEMPLATES/.github" ]; then
-  cp -R "$TEMPLATES/.github/"* "$TARGET/.github/" 2>/dev/null || true
+  # Copy prompts
+  if [ -d "$TEMPLATES/.github/prompts/halo" ]; then
+    cp -R "$TEMPLATES/.github/prompts/halo/"*.prompt.md "$TARGET/.github/prompts/halo/" 2>/dev/null || true
+  fi
+  # Copy agents
+  if [ -d "$TEMPLATES/.github/agents" ]; then
+    cp -R "$TEMPLATES/.github/agents/"*.agent.md "$TARGET/.github/agents/halo/" 2>/dev/null || true
+  fi
+  # Copy workflows
+  if [ -d "$TEMPLATES/.github/workflows" ]; then
+    cp "$TEMPLATES/.github/workflows/"*.yml "$TARGET/.github/workflows/" 2>/dev/null || true
+  fi
 fi
 echo "✓ Installed Halo Copilot prompts and agents to .github/"
 
