@@ -13,7 +13,7 @@ echo ""
 
 # Check prompts
 echo "Checking prompts..."
-for PROMPT in halo-search.prompt.md halo-apply.prompt.md halo-gatekeeper.prompt.md halo-install-wizard.prompt.md; do
+for PROMPT in halo-search.prompt.md halo-apply.prompt.md halo-gatekeeper.prompt.md halo-write-pattern.prompt.md halo-health.prompt.md halo-install-wizard.prompt.md; do
   if [ -f "$TARGET/.github/prompts/halo/$PROMPT" ]; then
     echo "  ✅ $PROMPT"
   else
