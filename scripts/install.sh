@@ -57,9 +57,15 @@ EOF
     echo "✓ Created .github/copilot-instructions.md with Halo instructions"
   elif grep -q "$MARKER_START" "$COPILOT_INSTRUCTIONS" 2>/dev/null; then
     # Update existing marker block
-    awk -v start="$MARKER_START" -v end="$MARKER_END" -v content="$SNIPPET_CONTENT" '
+    awk -v start="$MARKER_START" -v end="$MARKER_END" -v snippet="$SNIPPET" '
       BEGIN { in_block=0 }
-      $0 ~ start { print; print content; in_block=1; next }
+      $0 ~ start { 
+        print
+        while ((getline line < snippet) > 0) print line
+        close(snippet)
+        in_block=1
+        next
+      }
       $0 ~ end { print; in_block=0; next }
       !in_block { print }
     ' "$COPILOT_INSTRUCTIONS" > "$COPILOT_INSTRUCTIONS.tmp"
