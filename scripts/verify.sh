@@ -100,6 +100,38 @@ else
   echo "  ⚠️  .vscode/settings.json not found"
 fi
 
+# Check health check components
+echo ""
+echo "Checking health check components..."
+if [ -f "$TARGET/.github/prompts/halo/halo-health.prompt.md" ]; then
+  echo "  ✅ halo-health.prompt.md"
+else
+  echo "  ⚠️  halo-health.prompt.md (missing)"
+fi
+
+# Find the upstream submodule path
+UPSTREAM_PATH="$TARGET/.halo-halo/upstream"
+[ ! -d "$UPSTREAM_PATH" ] && UPSTREAM_PATH="$TARGET/.halo-halo/halo-halo-upstream"
+
+if [ -f "$UPSTREAM_PATH/scripts/staleness.sh" ]; then
+  if [ -x "$UPSTREAM_PATH/scripts/staleness.sh" ]; then
+    echo "  ✅ staleness.sh (executable)"
+  else
+    echo "  ⚠️  staleness.sh (not executable)"
+    echo "     Run: chmod +x $UPSTREAM_PATH/scripts/staleness.sh"
+  fi
+else
+  echo "  ⚠️  staleness.sh (missing)"
+fi
+
+# Check for Python 3 (needed for staleness.sh date calculations)
+if command -v python3 &>/dev/null; then
+  echo "  ✅ Python 3 available (for staleness.sh)"
+else
+  echo "  ⚠️  Python 3 not found (staleness.sh requires it for date math)"
+  echo "     Install Python 3 or staleness.sh will fail"
+fi
+
 # Check upstream patterns catalog is accessible
 echo ""
 echo "Checking patterns catalog..."
@@ -131,6 +163,7 @@ if [ $ERRORS -eq 0 ]; then
   echo "  - /halo-search <keywords>    # Search for patterns"
   echo "  - /halo-apply <pattern-id>   # Apply a pattern"
   echo "  - /halo-gatekeeper           # Capture new pattern"
+  echo "  - /halo-health               # Check catalog health"
   exit 0
 else
   echo "❌ $ERRORS error(s) found"

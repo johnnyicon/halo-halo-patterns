@@ -23,6 +23,44 @@ A collection of reusable patterns, troubleshooting guides, and debugging cases t
 
 See [`docs/INSTALL.md`](docs/INSTALL.md) for setup instructions.
 
+## Catalog Maintenance
+
+Halo-Halo includes a health check system to ensure patterns stay current and reliable.
+
+### Running Health Checks
+
+**Via Copilot prompt:**
+```
+/halo-health
+```
+
+**Via command line:**
+```bash
+# From consuming repo root
+.halo-halo/upstream/scripts/staleness.sh
+
+# Override staleness threshold (default: 180 days)
+MAX_LAST_VERIFIED_DAYS=90 .halo-halo/upstream/scripts/staleness.sh
+
+# Show help
+.halo-halo/upstream/scripts/staleness.sh --help
+```
+
+**Requirements:**
+- Bash
+- Python 3 (for date calculations)
+
+**Exit codes:**
+- `0` — All checks passed
+- `1` — Script error or invalid usage
+- `2` — Blocking issues found (overdue reviews, deprecated references)
+
+**What it checks:**
+- ✅ Patterns with `review_by` dates in the past (BLOCKING)
+- ⚠️ Patterns not verified in `MAX_LAST_VERIFIED_DAYS` (default: 180 days)
+- ⚠️ Patterns referencing deprecated patterns
+- ℹ️ Statistics (total patterns, review coverage)
+
 ## No tooling required
 
 This is a **Markdown-first** catalog. No build steps, no Node.js, no compilation. The patterns are human-readable and LLM-friendly as plain text files.

@@ -31,3 +31,4 @@ When you see an error, unexpected behavior, or an architectural decision:
 - `/halo-search` — Find relevant patterns for current issue
 - `/halo-apply` — Apply a pattern to this repo
 - `/halo-gatekeeper` — Capture a new pattern or local case
+- `/halo-health` — Audit catalog health (overdue reviews, stale patterns)
