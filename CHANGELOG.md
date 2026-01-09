@@ -19,7 +19,14 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
   - Comprehensive templates for troubleshooting, implementation, anti-pattern, and architecture patterns
   - Sanitization rules and verification checklists
   - Step-by-step workflow guidance
-- Workflow documentation: Gatekeeper (decides) → Writer (executes)
+- `/halo-commit` prompt for safely committing pattern artifacts with validation
+  - Pre-commit checks: staleness script, sanitization scans, metadata verification
+  - Separate workflows for local cases vs upstream patterns
+  - Submodule commit workflow with pointer update
+  - Error handling guidance for common issues
+  - Comprehensive verification checklist
+  - Generates safe git commands (does not run them automatically)
+- Workflow documentation: Gatekeeper (decides) → Writer (executes) → Commit (validates)
 - Health check system for catalog maintenance
   - `/halo-health` prompt for auditing pattern freshness via Copilot
   - `scripts/staleness.sh` for command-line health checks

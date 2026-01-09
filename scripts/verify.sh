@@ -13,7 +13,7 @@ echo ""
 
 # Check prompts
 echo "Checking prompts..."
-for PROMPT in halo-search.prompt.md halo-apply.prompt.md halo-gatekeeper.prompt.md halo-write-pattern.prompt.md halo-health.prompt.md halo-install-wizard.prompt.md; do
+for PROMPT in halo-search.prompt.md halo-apply.prompt.md halo-gatekeeper.prompt.md halo-write-pattern.prompt.md halo-commit.prompt.md halo-health.prompt.md halo-install-wizard.prompt.md; do
   if [ -f "$TARGET/.github/prompts/halo/$PROMPT" ]; then
     echo "  ✅ $PROMPT"
   else
@@ -164,6 +164,7 @@ if [ $ERRORS -eq 0 ]; then
   echo "  - /halo-apply <pattern-id>   # Apply a pattern"
   echo "  - /halo-gatekeeper           # Capture new pattern"
   echo "  - /halo-write-pattern        # Write from Gatekeeper decision"
+  echo "  - /halo-commit               # Commit with validation"
   echo "  - /halo-health               # Check catalog health"
   exit 0
 else

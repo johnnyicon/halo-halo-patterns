@@ -41,4 +41,5 @@ When you see an error, unexpected behavior, or an architectural decision:
 - `/halo-apply` — Apply a pattern to this repo
 - `/halo-gatekeeper` — Capture a new pattern or local case (decides routing)
 - `/halo-write-pattern` — Write pattern file from Gatekeeper decision
+- `/halo-commit` — Safely commit local cases or upstream patterns with validation
 - `/halo-health` — Audit catalog health (overdue reviews, stale patterns)
