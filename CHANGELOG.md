@@ -14,6 +14,12 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- `/halo-write-pattern` prompt for writing pattern files from Gatekeeper decisions
+  - Supports both local case files (`.halo-halo/local/cases/`) and upstream pattern drafts
+  - Comprehensive templates for troubleshooting, implementation, anti-pattern, and architecture patterns
+  - Sanitization rules and verification checklists
+  - Step-by-step workflow guidance
+- Workflow documentation: Gatekeeper (decides) → Writer (executes)
 - Health check system for catalog maintenance
   - `/halo-health` prompt for auditing pattern freshness via Copilot
   - `scripts/staleness.sh` for command-line health checks
@@ -21,13 +27,14 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
   - `--help` flag with usage documentation
   - Python 3 availability check with clear error message
 - Verification script now checks health check components (halo-health.prompt.md, staleness.sh executable, Python 3)
-- Instructions snippet now documents `/halo-health` command
+- Instructions snippet now documents `/halo-health` and `/halo-write-pattern` commands
 - README now includes "Catalog Maintenance" section with health check usage
 
 ### Fixed
 - Install script now selectively copies only prompts, agents, and workflows (not snippet file)
 - Verify script no longer checks for snippet file in consuming repo
 - Agent tool names corrected: `repo_read` → `read_file`, `repo_search` → `semantic_search`
+- Install script uses file-based awk to avoid newline issues in snippet merge
 
 ---
 

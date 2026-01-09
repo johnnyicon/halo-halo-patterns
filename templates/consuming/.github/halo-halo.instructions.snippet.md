@@ -16,8 +16,17 @@ When you see an error, unexpected behavior, or an architectural decision:
 - You discovered a reusable workaround
 
 **When running gatekeeper, provide:**
-- The touched files list: `git diff --name-only` or `git status --porceloin`
+- The touched files list: `git diff --name-only` or `git status --porcelain`
 - A brief summary of symptoms → root cause → fix
+
+### Workflow: Gatekeeper → Writer
+
+1. **Gatekeeper decides** - Route to local case or upstream pattern
+2. **Writer executes** - Creates the file based on routing
+
+**Use `/halo-write-pattern` after Gatekeeper approval to:**
+- Create local case file (`.halo-halo/local/cases/`)
+- OR create upstream pattern draft (`.halo-halo/halo-halo-upstream/patterns/`)
 
 ### Context Gathering Rules
 
@@ -30,5 +39,6 @@ When you see an error, unexpected behavior, or an architectural decision:
 
 - `/halo-search` — Find relevant patterns for current issue
 - `/halo-apply` — Apply a pattern to this repo
-- `/halo-gatekeeper` — Capture a new pattern or local case
+- `/halo-gatekeeper` — Capture a new pattern or local case (decides routing)
+- `/halo-write-pattern` — Write pattern file from Gatekeeper decision
 - `/halo-health` — Audit catalog health (overdue reviews, stale patterns)

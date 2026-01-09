@@ -163,6 +163,7 @@ if [ $ERRORS -eq 0 ]; then
   echo "  - /halo-search <keywords>    # Search for patterns"
   echo "  - /halo-apply <pattern-id>   # Apply a pattern"
   echo "  - /halo-gatekeeper           # Capture new pattern"
+  echo "  - /halo-write-pattern        # Write from Gatekeeper decision"
   echo "  - /halo-health               # Check catalog health"
   exit 0
 else
