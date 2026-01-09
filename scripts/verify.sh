@@ -25,11 +25,11 @@ done
 # Check agents
 echo ""
 echo "Checking agents..."
-if [ -f "$TARGET/.github/agents/halo/halo-gatekeeper.agent.md" ]; then
+if [ -f "$TARGET/.github/agents/halo-gatekeeper.agent.md" ]; then
   echo "  ✅ halo-gatekeeper.agent.md"
   
   # Verify agent name
-  if grep -q "name: Halo-Halo Patterns Gatekeeper" "$TARGET/.github/agents/halo/halo-gatekeeper.agent.md" 2>/dev/null; then
+  if grep -q "name: Halo-Halo Patterns Gatekeeper" "$TARGET/.github/agents/halo-gatekeeper.agent.md" 2>/dev/null; then
     echo "  ✅ Agent name is correct"
   else
     echo "  ⚠️  Agent name may need updating"

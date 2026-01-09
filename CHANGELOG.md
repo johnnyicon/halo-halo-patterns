@@ -14,6 +14,24 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+---
+
+## [0.1.1] - 2026-01-08
+
+### Fixed
+- **CRITICAL:** Install script now places agents in root `.github/agents/` folder (not `agents/halo/` subfolder)
+  - VS Code doesn't support agent subfolders - agents must be in root agents directory
+  - Updated `scripts/install.sh` to copy agents to `.github/agents/` instead of `.github/agents/halo/`
+  - Updated `scripts/verify.sh` to check for agent at correct path
+  - Updated `halo-install-wizard.prompt.md` documentation to reflect correct paths
+  - **Action for existing installations:** Move `.github/agents/halo/halo-gatekeeper.agent.md` to `.github/agents/halo-gatekeeper.agent.md` and remove empty `halo/` folder
+
+### Added
 - `/halo-write-pattern` prompt for writing pattern files from Gatekeeper decisions
   - Supports both local case files (`.halo-halo/local/cases/`) and upstream pattern drafts
   - Comprehensive templates for troubleshooting, implementation, anti-pattern, and architecture patterns
@@ -37,7 +55,7 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
 - Instructions snippet now documents `/halo-health` and `/halo-write-pattern` commands
 - README now includes "Catalog Maintenance" section with health check usage
 
-### Fixed
+### Changed
 - Install script now selectively copies only prompts, agents, and workflows (not snippet file)
 - Verify script no longer checks for snippet file in consuming repo
 - Agent tool names corrected: `repo_read` → `read_file`, `repo_search` → `semantic_search`
@@ -71,4 +89,5 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 0.1.1 | 2026-01-08 | Fix agent installation path (critical bugfix) |
 | 0.1.0 | 2026-01-08 | Initial release |

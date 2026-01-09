@@ -17,15 +17,15 @@ mkdir -p "$TARGET/.halo-halo/local/cases"
 mkdir -p "$TARGET/.halo-halo/local/scratch"
 
 # Copy GitHub templates (halo-prefixed prompts, agents, workflows)
-mkdir -p "$TARGET/.github/prompts/halo" "$TARGET/.github/agents/halo" "$TARGET/.github/workflows"
+mkdir -p "$TARGET/.github/prompts/halo" "$TARGET/.github/agents" "$TARGET/.github/workflows"
 if [ -d "$TEMPLATES/.github" ]; then
   # Copy prompts
   if [ -d "$TEMPLATES/.github/prompts/halo" ]; then
     cp -R "$TEMPLATES/.github/prompts/halo/"*.prompt.md "$TARGET/.github/prompts/halo/" 2>/dev/null || true
   fi
-  # Copy agents
+  # Copy agents (to root agents folder, not subfolder - VS Code doesn't support agent subfolders)
   if [ -d "$TEMPLATES/.github/agents" ]; then
-    cp -R "$TEMPLATES/.github/agents/"*.agent.md "$TARGET/.github/agents/halo/" 2>/dev/null || true
+    cp -R "$TEMPLATES/.github/agents/"*.agent.md "$TARGET/.github/agents/" 2>/dev/null || true
   fi
   # Copy workflows
   if [ -d "$TEMPLATES/.github/workflows" ]; then

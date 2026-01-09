@@ -23,7 +23,7 @@ bash .halo-halo/upstream/scripts/install.sh .
 If you cannot execute directly, **instruct the user to run it** and wait for their confirmation.
 
 **What this script does:**
-- Copies Halo prompts/agents to `.github/prompts/halo/` and `.github/agents/halo/`
+- Copies Halo prompts to `.github/prompts/halo/` and agents to `.github/agents/`
 - Creates `.halo-halo/local/{cases,scratch}`
 - Adds `.halo-halo/local/**` to `.gitignore` (idempotent)
 - Merges Halo instructions into `copilot-instructions.md` using marker blocks
@@ -65,7 +65,7 @@ Confirm these paths exist:
 - ✅ `.github/prompts/halo/halo-search.prompt.md`
 - ✅ `.github/prompts/halo/halo-apply.prompt.md`
 - ✅ `.github/prompts/halo/halo-gatekeeper.prompt.md`
-- ✅ `.github/agents/halo/halo-gatekeeper.agent.md`
+- ✅ `.github/agents/halo-gatekeeper.agent.md`
 - ✅ `.github/halo-halo.instructions.snippet.md` (for future reference)
 
 Check `.gitignore` contains:
@@ -95,8 +95,8 @@ Report installation status:
 
 **Files Created/Modified:**
 - .github/copilot-instructions.md (Halo block added/updated)
-- .github/prompts/halo/* (3 prompts)
-- .github/agents/halo/* (1 agent)
+- .github/prompts/halo/* (7 prompts)
+- .github/agents/halo-gatekeeper.agent.md (1 agent)
 - .halo-halo/local/cases/ (created)
 - .halo-halo/local/scratch/ (created)
 - .gitignore (Halo block appended)
