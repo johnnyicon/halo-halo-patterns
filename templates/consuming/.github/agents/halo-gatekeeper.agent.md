@@ -2,8 +2,11 @@
 name: Halo-Halo Patterns Gatekeeper
 description: Routes new learnings to shared catalog vs local case, enforces sanitization and template completeness.
 tools:
-  - repo_read
-  - repo_search
+  - read_file
+  - semantic_search
+  - grep_search
+  - list_files
+  - run_in_terminal
 infer: true
 ---
 
