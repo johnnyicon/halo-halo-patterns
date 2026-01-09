@@ -151,6 +151,9 @@ echo "  3. Run /halo-install-wizard for advanced setup"
 echo ""
 echo "Patterns location: .halo-halo/upstream/patterns/"
 echo "Local cases: .halo-halo/local/cases/"
+echo ""
+echo "🔄 To update Halo-Halo to latest:"
+echo "   bash .halo-halo/halo-halo-upstream/scripts/update-submodule-pointer.sh"
 
 # Run verification script
 if [ -f "$SCRIPT_DIR/verify.sh" ]; then

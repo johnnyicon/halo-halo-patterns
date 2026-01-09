@@ -21,6 +21,20 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
 
 ---
 
+## [0.2.0] - 2026-01-08
+
+### Added
+- **CRITICAL FEATURE:** `scripts/update-submodule-pointer.sh` - Enables consuming repos to update their Halo-Halo submodule to latest version
+  - Detects current vs latest version in submodule
+  - Shows version change and relevant CHANGELOG section
+  - Stages submodule pointer update (leaves commit/push to user)
+  - Includes error handling and validation
+  - **Action for consuming repos:** Run `.halo-halo/halo-halo-upstream/scripts/update-submodule-pointer.sh` from repo root to update
+- Updated `scripts/install.sh` completion message to reference update script
+  - Adds "🔄 To update Halo-Halo to latest:" section with instructions
+
+---
+
 ## [0.1.1] - 2026-01-08
 
 ### Fixed
