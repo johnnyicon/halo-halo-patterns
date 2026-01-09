@@ -1,5 +1,5 @@
 ---
-name: Patterns Gatekeeper
+name: Halo-Halo Patterns Gatekeeper
 description: Routes new learnings to shared catalog vs local case, enforces sanitization and template completeness.
 tools:
   - repo_read

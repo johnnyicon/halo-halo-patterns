@@ -102,6 +102,28 @@ EOF
   echo "✓ Created .halo-halo/local/README.md"
 fi
 
+# Update VS Code settings.json to include Halo prompts path (if file exists)
+VSCODE_SETTINGS="$TARGET/.vscode/settings.json"
+if [ -f "$VSCODE_SETTINGS" ]; then
+  # Check if chat.promptFilesLocations exists and doesn't already have halo path
+  if grep -q '"chat.promptFilesLocations"' "$VSCODE_SETTINGS" 2>/dev/null; then
+    if ! grep -q '".github/prompts/halo"' "$VSCODE_SETTINGS" 2>/dev/null; then
+      # Add halo path to existing promptFilesLocations using jq if available, or warn user
+      if command -v jq &> /dev/null; then
+        TMP_FILE=$(mktemp)
+        jq '.["chat.promptFilesLocations"][".github/prompts/halo"] = true' "$VSCODE_SETTINGS" > "$TMP_FILE" && mv "$TMP_FILE" "$VSCODE_SETTINGS"
+        echo "✓ Added .github/prompts/halo to VS Code settings.json"
+      else
+        echo "⚠ Please manually add \".github/prompts/halo\": true to chat.promptFilesLocations in .vscode/settings.json"
+      fi
+    else
+      echo "✓ VS Code settings.json already configured for Halo prompts"
+    fi
+  else
+    echo "⚠ Please add chat.promptFilesLocations to .vscode/settings.json (see VS Code Copilot docs)"
+  fi
+fi
+
 echo ""
 echo "✅ Installation complete!"
 echo ""
@@ -112,3 +134,11 @@ echo "  3. Run /halo-install-wizard for advanced setup"
 echo ""
 echo "Patterns location: .halo-halo/upstream/patterns/"
 echo "Local cases: .halo-halo/local/cases/"
+
+# Run verification script
+if [ -f "$SCRIPT_DIR/verify.sh" ]; then
+  bash "$SCRIPT_DIR/verify.sh" "$TARGET"
+else
+  echo ""
+  echo "⚠️  Verification script not found. Installation may be incomplete."
+fi
