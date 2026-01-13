@@ -4,7 +4,7 @@ title: "Event Race Condition When Portal Renders Async in Stimulus"
 type: troubleshooting
 status: draft
 confidence: high
-revision: 1
+revision: 2
 languages:
   - language: ruby
     versions: ">=3.0"
@@ -27,7 +27,7 @@ tags:
   - events
   - portals
 introduced: 2026-01-12
-last_verified: 2026-01-12
+last_verified: 2026-01-13
 review_by: 2026-04-12
 sanitized: true
 related:
@@ -120,6 +120,21 @@ By the time user clicks again, drawer controller has connected and listener is a
 Use three synchronization mechanisms to cover all timing scenarios:
 
 **Pattern:**
+
+### Architectural Fix (Often Best): Remove the Async Initialization Point
+
+The `__*Ready` + `*:ready` event + timeout pattern is a good mitigation when you *must* keep an async initialization boundary (most commonly: portal-based UI). However, if you control the UI architecture, the most reliable fix is to eliminate the race condition entirely.
+
+**Approach:** Render the “listening” controller synchronously in the initial DOM (inline, non-portal). For example, instead of rendering a drawer/sheet via a portal, render an inline “details pane” that is always present but toggled with local state (e.g., `.hidden`).
+
+**Why this works:**
+- The listener controller connects during normal page load, before the first interaction.
+- There is no dependency on portal timing, animation scheduling, or delayed DOM insertion.
+- You can often remove `window.__*Ready` flags and timeout fallbacks because the listener is always present.
+
+**Rule of thumb:**
+- If the UI element is always in the DOM (just hidden), you generally do **not** need readiness flags.
+- If the UI element is injected later (portal, lazy load, Turbo Stream insertion), keep the readiness pattern.
 
 ```javascript
 // Drawer Controller (initializing controller)

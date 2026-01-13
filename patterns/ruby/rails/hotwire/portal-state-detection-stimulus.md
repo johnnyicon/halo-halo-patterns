@@ -4,7 +4,7 @@ title: "Portal Component State Detection Fails in Stimulus Controllers"
 type: troubleshooting
 status: draft
 confidence: high
-revision: 1
+revision: 2
 languages:
   - language: ruby
     versions: ">=3.0"
@@ -30,7 +30,7 @@ tags:
   - dom-scope
   - state-detection
 introduced: 2026-01-12
-last_verified: 2026-01-12
+last_verified: 2026-01-13
 review_by: 2026-04-12
 sanitized: true
 related:
@@ -226,6 +226,24 @@ export default class extends Controller {
 If state detection becomes complex, use custom events:
 
 ```javascript
+
+## Architectural Alternative (Preferred): Avoid Portals for Stimulus-Controlled State
+
+If the portal state must be checked frequently (or correctness is critical), consider removing the need for portal state detection entirely.
+
+**Approach:** Render the component inline (non-portal) so Stimulus can reliably:
+- query element-scoped state (`this.element.querySelector(...)`), and
+- use targets/outlets without cross-tree ambiguity.
+
+**Example:** Replace a portal-based sheet/drawer with an inline “push-content” details pane whose open/closed state is represented by a local CSS toggle (e.g., `.hidden`, `aria-hidden`, or an explicit `data-open="true"`).
+
+**Benefits:**
+- Eliminates false negatives from element-scoped state detection
+- Simplifies selectors (no `document.querySelector(...)` dependency)
+- Reduces test brittleness (state is in the same subtree as the controller)
+
+**Tradeoff:**
+- Inline rendering may require layout work (flex/grid constraints) instead of relying on an overlay component
 // Portal component dispatches events
 export default class extends Controller {
   connect() {
