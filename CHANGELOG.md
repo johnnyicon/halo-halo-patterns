@@ -14,6 +14,15 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- **New pattern category:** `patterns/go/` — Go language-specific testing and runtime patterns
+- `patterns/go/keyring-test-isolation.md` — Troubleshooting pattern for OS keychain contamination in Go tests. Root cause: test helper constructors that override the file path but retain the real `KeyringStore` silently write mock tokens to the real OS keychain; those tokens persist after the test and cause misleading auth errors in the live app. Fix: extract a `keyringBackend` interface; use `noopKeyringStore` in test helpers. Score: 9 (above catalog threshold of 8). Discovered during Laon Phase 2 testing (Maykapal OS).
+- **New pattern category:** `patterns/ai-providers/` — Provider-specific API behavior patterns (Anthropic, OpenAI, etc.)
+- **New pattern category:** `patterns/ai-providers/anthropic/` — Anthropic API-specific patterns
+- `patterns/ai-providers/anthropic/oauth-token-required-headers.md` — Troubleshooting pattern for Anthropic OAuth tokens (`sk-ant-oat01-...`) returning `401 "OAuth authentication is currently not supported"`. Root cause: 3 required companion headers (`anthropic-beta`, `User-Agent`, `x-app`) plus mandatory first system block are missing. Includes token detection by prefix, complete header table, system-as-block-array pattern, and verification checklist. Source-confirmed from `@mariozechner/pi-ai` reference implementation.
+- **New pattern category:** `patterns/ai-providers/openai/` — OpenAI API-specific patterns
+- `patterns/ai-providers/openai/codex-oauth-separate-endpoint.md` — Architecture pattern: OpenAI Codex OAuth tokens (ChatGPT Plus/Pro) do NOT use `api.openai.com` — they target `chatgpt.com/backend-api/codex/responses` (Responses API format). Includes full header table, JWT account-ID extraction, OAuth login flow, token refresh, and tradeoffs vs standard API key path. Source-confirmed from `@mariozechner/pi-ai` reference implementation.
+- **New pattern category:** `patterns/openclaw/` — OpenClaw infrastructure and AI-agent ops patterns
+- `patterns/openclaw/sub-agent-device-scope-repair.md` — Troubleshooting pattern for sub-agent `sessions_spawn` silently failing with "pairing required" (1008) due to missing `operator.write` gateway device scope. Includes step-by-step diagnosis via gateway logs and `openclaw devices list`, fix via `approve` + `rotate`, and a prevention note about the current detection gap.
 
 ### Changed
 
