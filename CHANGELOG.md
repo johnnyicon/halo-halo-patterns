@@ -23,6 +23,8 @@ All notable changes to Halo-Halo Patterns will be documented in this file.
 - `patterns/ai-providers/openai/codex-oauth-separate-endpoint.md` — Architecture pattern: OpenAI Codex OAuth tokens (ChatGPT Plus/Pro) do NOT use `api.openai.com` — they target `chatgpt.com/backend-api/codex/responses` (Responses API format). Includes full header table, JWT account-ID extraction, OAuth login flow, token refresh, and tradeoffs vs standard API key path. Source-confirmed from `@mariozechner/pi-ai` reference implementation.
 - **New pattern category:** `patterns/openclaw/` — OpenClaw infrastructure and AI-agent ops patterns
 - `patterns/openclaw/sub-agent-device-scope-repair.md` — Troubleshooting pattern for sub-agent `sessions_spawn` silently failing with "pairing required" (1008) due to missing `operator.write` gateway device scope. Includes step-by-step diagnosis via gateway logs and `openclaw devices list`, fix via `approve` + `rotate`, and a prevention note about the current detection gap.
+- `patterns/go/bubbletea-input-blink-layout-overflow-duplication.md` — Troubleshooting pattern for Bubble Tea TUI input line duplicating infinitely when `textinput.Blink` re-renders combine with unstable panel height math in composed layouts. Includes smoke-test isolation (disable blink), root cause model, fixed-height contract checklist, and safe stabilization strategy (static cursor while refactor is in progress).
+- `patterns/openclaw/subagent-rate-limit-fallback-and-serialization.md` — Troubleshooting pattern for sub-agent fan-out causing provider rate limits during parallel coding tasks. Recommends serialization/low-concurrency orchestration and explicit fallback-chain hardening across providers.
 
 ### Changed
 
