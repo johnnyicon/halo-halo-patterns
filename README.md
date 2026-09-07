@@ -14,6 +14,8 @@ A collection of reusable patterns, troubleshooting guides, and debugging cases t
 ## Key conventions:
 
 - **Patterns catalog** lives in `patterns/` (Markdown files with YAML front matter)
+- **Research notes** live in `docs/` and preserve the alternatives, evidence, and decision context behind a pattern
+- **Recipes** live in `patterns/` and describe reusable implementation boundaries rather than app-specific code
 - **Consuming repos** mount this as a submodule at `.halo-halo/upstream/`
 - **Local patterns** live in `.halo-halo/local/` (gitignored, project-specific)
 - **Copilot prompts** in `.github/prompts/` become slash commands
