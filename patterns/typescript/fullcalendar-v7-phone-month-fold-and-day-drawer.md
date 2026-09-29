@@ -4,7 +4,7 @@ title: FullCalendar 7 on a Phone and a Desktop: Own Class Hooks, a Compact Month
 type: implementation
 status: draft
 confidence: high
-revision: 1
+revision: 2
 
 languages:
   - TypeScript
@@ -210,18 +210,36 @@ a main and an alt slot, so hide the alt one:
 .cal-grid .cal-listev, .cal-grid .cal-listev * { white-space: normal; }
 ```
 
-### 8. Desktop: the day opens in a drawer over the month
+### 8. Desktop: the day opens in a drawer from the screen's edge
 
-`dayPanel` state opens on a day click or a `?day=` deep link and closes on
-Escape or a cross. Render the drawer only while open, `position: absolute;
-right: 0` inside the layout box, with a short keyframe entrance
-(`translateX(24px) → 0`, 200ms, none under `prefers-reduced-motion`). Never
-push the month aside: a column that appears re-lays the grid out on every
-open and close, which reads as a jolt; a drawer parked past the edge while
-closed widens the page. Make the drawer its own `@container` so its rows take
-the narrow shape (time and venue under the title), and let the under-grid
-list stand in where the box is narrower than the drawer needs, chosen by the
-same container query so the two never both show.
+`dayPanel` state opens on a day click or a `?day=` deep link. Use the
+design system's Sheet (shadcn: Radix Dialog with a `side` variant), not a
+positioned card of your own:
+
+```tsx
+<Sheet open={open} onOpenChange={(o) => { if (!o) setOpen(false) }} modal={false}>
+  <SheetContent
+    side="right"
+    overlay={false}                    // the month stays usable beside it
+    className="w-[400px] gap-0 p-0"
+    onInteractOutside={(e) => { if ((e.target as HTMLElement).closest('.cal-grid')) e.preventDefault() }}
+    onOpenAutoFocus={(e) => e.preventDefault()}
+  >
+    …heading with a Today chip, a plus for that day, a cross; then the day's list…
+  </SheetContent>
+</Sheet>
+```
+
+Non-modal with no overlay, so a click on another day swaps the drawer's
+day rather than closing it (the `onInteractOutside` guard); any other
+outside click or Escape closes it. The sheet is `position: fixed` at the
+viewport's right edge and full height, so the month's width never changes
+and the page never widens. Two things that look like a drawer and are not:
+a third grid column (re-lays the grid out on every open and close, a
+visible jolt) and an absolutely positioned card over the grid (not a
+drawer, and if parked past the edge while closed it widens the page). Make
+the sheet's body its own `@container` so rows inside take the narrow
+shape; under 700px the under-grid list stands in.
 
 ### 9. Theme specificity
 
@@ -236,7 +254,7 @@ transforms and heights on your own elements, as above, so you rarely need it.
 - The fold rides on document scroll: exact and stateless, but the list area
   must always be tall enough to scroll through a fold, which leaves blank
   space under a short day (the phone's own calendar makes the same trade).
-- A drawer covers the month's right columns while open; a pushed column would
+- The sheet covers the month's right columns while open; a pushed column would
   not, but it jolts the grid.
 - `:has()` is required (Safari 15.4+, Chrome 105+).
 
@@ -253,7 +271,7 @@ transforms and heights on your own elements, as above, so you rarely need it.
   bottom edge and the viewport bottom.
 - List view: one header per day; today's carries the chip; the page is
   scrolled so today's header is in view.
-- Desktop: a day click opens the drawer; `?day=` opens it; Escape closes it;
-  the grid's width is identical before, during and after; `scrollWidth ===
-  innerWidth` at 1440, 1280, 1100, 1024 and 900; at 900 the under-grid list
-  shows instead.
+- Desktop: a day click opens the sheet, `position: fixed`, `right: 0`, full
+  viewport height; `?day=` opens it; clicking another day keeps it open on
+  the new day; Escape closes it; the grid's width is identical before,
+  during and after; every surface still fits its measure.
