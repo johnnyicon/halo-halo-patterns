@@ -1,0 +1,120 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PostgreSQL hosting and idle-worker cost guide</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f1ec;color:#21313b;font:17px/1.68 system-ui,sans-serif}main{max-width:1150px;margin:32px auto;background:#fff;padding:48px 58px;border:1px solid #dadeda;border-radius:14px}h1{font-size:2.45rem;line-height:1.14;letter-spacing:-.035em}h2{font-size:1.5rem;margin-top:2.5em;padding-top:.5em;border-top:1px solid #dbe2e4}h3{font-size:1.13rem;margin-top:1.8em}a{color:#12607a;text-underline-offset:3px}table{border-collapse:collapse;display:block;overflow:auto;width:100%;font-size:.88rem;line-height:1.5;margin:24px 0}th,td{padding:13px 15px;border-bottom:1px solid #dce3e5;text-align:left;vertical-align:top}th{background:#e8f0f1}tr:nth-child(even) td{background:#f7f9f9}code{font-size:.88em;overflow-wrap:anywhere}pre{white-space:pre-wrap;background:#edf1f3;padding:18px}li{margin:.5em 0}.toc{padding:14px 24px;background:#f1f5f4;border-radius:8px;font-size:.9rem}.toc ul{padding-left:20px}.toc li{margin:.15em 0}.note{color:#58717b;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}@media(max-width:720px){main{padding:24px;margin:0;border:0;border-radius:0}h1{font-size:1.9rem}th,td{padding:10px}}@media(prefers-color-scheme:dark){body{background:#121b21;color:#e0e9ed}main{background:#1d2a32;border-color:#3c515d}a{color:#89d3e5}h2,th,td{border-color:#435760}th,.toc,pre{background:#283e46}tr:nth-child(even) td{background:#24333c}.note{color:#a4bbc6}}@media print{body,main{background:white;color:black}main{margin:0;padding:0;border:0;max-width:none}.toc{display:none}a{color:inherit}table{display:table;font-size:10pt}h2{break-after:avoid}}</style></head><body><main><p class="note">Research and implementation planning · 3 October 2026 · Not deployed</p><h1 id="postgresql-hosting-and-idle-worker-cost-guide">PostgreSQL hosting and idle-worker cost guide</h1>
+<p>[TOC]
+Research date: 3 October 2026 UTC. Proposal, not a deployed or benchmarked architecture. All prices below are USD before taxes. No server, subscription or migration has been purchased by this research.</p>
+<h2 id="recommendation">Recommendation</h2>
+<p>For an intermittently used knowledge application, compare <strong>Neon with workers that can sleep</strong> against <strong>a self-managed Hetzner server</strong>. Choose Railway when staying with the existing deployment and operational simplicity matters more than a modest possible saving. RDS becomes more attractive when AWS networking, managed recovery and availability requirements justify its larger operational footprint.</p>
+<p>Hetzner can be the lowest predictable infrastructure bill, particularly in Europe. It transfers database administration to the application operator. Neon reduces that maintenance responsibility, but continuous application traffic can erase its idle-compute savings. There is no unconditional cheapest provider.</p>
+<p>For a disk-full production incident, recover the current data first. Do not confuse choosing a future host with having a verified export available for migration. An existing volume expansion can be the shortest recovery route even if the database moves later.</p>
+<h2 id="monthly-comparison">Monthly comparison</h2>
+<p>Model: one production PostgreSQL database, approximately 20 GB billable database storage where charged separately, 730 hours/month for continuously running resources. The hardware and performance are <strong>not equivalent</strong> across rows. These are calculations and planning allowances, not invoices, capacity tests or service-level guarantees.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Calculation / assumption</th>
+<th style="text-align: right;">Database infrastructure per month</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Railway</td>
+<td>2 GB average RAM + 0.1 average vCPU + 20 GB used volume</td>
+<td style="text-align: right;">$25.00; practical provisional budget $25–35</td>
+</tr>
+<tr>
+<td>Neon Launch, light use</td>
+<td>0.5 CU × 60 awake hours × $0.106 + 20 GB × $0.35</td>
+<td style="text-align: right;">$10.18</td>
+</tr>
+<tr>
+<td>Neon Launch, moderate awake time</td>
+<td>0.5 CU × 240 awake hours × $0.106 + storage</td>
+<td style="text-align: right;">$19.72</td>
+</tr>
+<tr>
+<td>Neon Launch, continuously awake</td>
+<td>0.5–1 CU × 730 hours + storage</td>
+<td style="text-align: right;">$45.69–84.38</td>
+</tr>
+<tr>
+<td>RDS PostgreSQL, Oregon, Single-AZ small</td>
+<td><code>db.t4g.small</code> at $0.032/hour + 20 GB gp3 at $0.115</td>
+<td style="text-align: right;">$25.66 before extras; fit unproven</td>
+</tr>
+<tr>
+<td>RDS PostgreSQL, Oregon, Single-AZ medium</td>
+<td><code>db.t4g.medium</code> at $0.065/hour + storage</td>
+<td style="text-align: right;">$49.75 before extras</td>
+</tr>
+<tr>
+<td>Hetzner Europe, CX33</td>
+<td>$9.99 server + $2.00 server backups + $0.60 IPv4</td>
+<td style="text-align: right;"><strong>$12.59</strong>, plus independent database backup</td>
+</tr>
+<tr>
+<td>Hetzner US, CPX21 price illustration</td>
+<td>$37.49 server + $7.50 server backups + $0.60 IPv4</td>
+<td style="text-align: right;"><strong>$45.59</strong>, plus independent database backup</td>
+</tr>
+</tbody>
+</table>
+<p>For an illustrative production total, add a separately stated <strong>$10–20 application/operations allowance</strong> to each database figure. That allowance has not been measured for a particular app. European Hetzner plus this allowance is about <strong>$23–33</strong>, before independent backup storage and operator time; sleeping Neon about <strong>$20–40</strong>; Railway about <strong>$35–55</strong>; medium RDS about <strong>$60–70 before AWS extras</strong>. Do not include an imaginary saving from moving the application too: that is a separate topology and benchmark.</p>
+<p>Staging, AI inference and embedding API charges, taxes, excess traffic, migration overlap and human maintenance are excluded. Historical retention, write volume and recovery objectives determine independent backup costs; avoid quoting a fixed backup price without them. A one-off import or reindex may keep compute awake much longer than a normal month.</p>
+<h3 id="railway-metered-resources-with-a-minimum">Railway: metered resources, with a minimum</h3>
+<p>Published memory is $10/GB-month, CPU $20/vCPU-month and used-volume storage $0.15/GB-month. Hobby's $5 and Pro's $20 workspace minimum include usage. Do not add the minimum again to the same resource charge. The 5 GB Hobby volume ceiling, rather than PostgreSQL itself, can necessitate a plan change. Ordinary PostgreSQL remains running and consumes memory while idle. Sources: <a href="https://docs.railway.com/pricing/plans">plans</a>, <a href="https://docs.railway.com/pricing/understanding-your-bill">billing</a>, <a href="https://docs.railway.com/volumes/reference">volume limits</a>.</p>
+<h3 id="neon-awake-time-must-be-demonstrated">Neon: awake time must be demonstrated</h3>
+<p>Launch compute is $0.106/CU-hour, storage $0.35/GB-month; restore-history storage is separately $0.20/GB-month when applicable. Five-minute auto-suspend only helps when actual queries/connections and provider behavior permit it. Storage still costs money while compute sleeps. Higher working-set demand can raise required compute. Sources: <a href="https://neon.com/pricing">pricing</a>, <a href="https://neon.com/docs/manage/endpoints/">compute lifecycle</a>.</p>
+<h3 id="aws-distinguish-rds-from-aurora-serverless">AWS: distinguish RDS from Aurora Serverless</h3>
+<p>RDS examples use the <a href="https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/us-west-2/index.json">official Oregon price list</a>, published 1 October 2026, and <a href="https://aws.amazon.com/rds/postgresql/pricing/">PostgreSQL pricing</a>. Ordinary RDS charges for running instance hours and provisioned storage. Burst CPU, cross-provider networking and excess backups can add cost; Multi-AZ is not included here. Aurora Serverless v2 can pause at zero on eligible versions, but has different capacity units and storage/I/O charges. It is not the $0.06 old serverless rate: standard v2 Oregon capacity is $0.12/ACU-hour. See <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2-auto-pause.html">Aurora pause conditions</a>.</p>
+<h3 id="hetzner-own-the-server-operations">Hetzner: own the server operations</h3>
+<p>CX33 provides 4 shared vCPUs, 8 GB RAM and 80 GB local NVMe. It is a virtual server with administrator control, not a dedicated physical machine or a managed PostgreSQL service. Its disk also houses the operating system, logs and temporary work. The monthly server cap is predictable; extra services and traffic can still add charges, and powering it off does not delete its bill. Sources: <a href="https://www.hetzner.com/cloud/cost-optimized/">specifications and availability</a>, <a href="https://docs.hetzner.com/cloud/billing/faq/">billing</a>.</p>
+<p>The current published Europe CX33 price is $9.99 excluding IPv4; US CPX21 is $37.49. These are different plans, not claims of equivalent hardware. Use current regional prices rather than old $4–8 advertisements. <a href="https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/">June 2026 price adjustment</a>. IPv4 adds $0.60/month; server backups add 20% of server cost for seven slots. <a href="https://docs.hetzner.com/cloud/servers/primary-ips/overview/">IP pricing</a>, <a href="https://docs.hetzner.com/cloud/billing/faq/">backup billing</a>.</p>
+<p><strong>Availability caveat:</strong> the public cost-optimized page returned CX33 as unavailable during this research. This may reflect capacity or the page's dynamic state; no authenticated regional stock check or reservation was made. Treat $12.59 as a conditional quote, not an immediately procurable server. The low-price CX offering is European; do not apply its price to a US deployment.</p>
+<p>A Railway application talking to a European database may incur extra latency on every database round trip. Measure the existing app region, candidate endpoint latency and representative multi-query requests before choosing a location. Provider-private networks do not automatically connect across companies. Design TLS with certificate verification, least-privilege database roles and a restricted network path; stable egress or a supported tunnel may add cost/complexity. Do not open PostgreSQL to every address merely to make a cheap comparison work.</p>
+<p>The operator owns OS/PostgreSQL/pgvector updates, resource limits, disk/WAL alerts, access control, backup delivery and restore drills. A single VM has no automatic PostgreSQL failover. Agents can implement and maintain scripts, but are not an unattended operations service unless scheduled monitoring and an accountable responder actually exist.</p>
+<p>Hetzner server snapshots/backups do <strong>not</strong> cover attached block volumes and are not a substitute for tested database-aware recovery or independent original-file backups. Keep a separate off-provider database/source backup; add WAL archiving only when a defined PITR objective requires and tests it. <a href="https://docs.hetzner.com/cloud/servers/backups-snapshots/overview/">Backup scope</a>.</p>
+<h2 id="storage-source-bytes-are-not-database-capacity">Storage: source bytes are not database capacity</h2>
+<p>Knowledge databases often store originals, extracted text, immutable versions, overlapping passages, vectors and multiple indexes. PostgreSQL additionally needs WAL, temporary/index-build space and filesystem headroom. Compressed dump size is not live disk demand. Original files may live on a different volume entirely.</p>
+<p>An anonymized workload examined for this research had approximately 111 MB of new prepared uploads. A 512-character window with 64-character overlap projected 240,614 passages. At 1,536 dimensions, vectors alone occupy about 1.48 GB before passage text, indexes, WAL and the older corpus. This is a projection, not a measured index size. <a href="https://github.com/pgvector/pgvector/blob/master/README.md?plain=1">pgvector storage formula</a>.</p>
+<p>Before bulk imports, measure database/table/index sizes, project chunk/vector growth, budget transient indexing/WAL peaks and check free disk. Preserve source archives while benchmarking a canonical retrieval representation and larger structure-aware passages. Do not silently delete provenance or break pinned citations to reduce size. Batching embedding requests can speed ingestion but does not itself reduce vector storage.</p>
+<h2 id="polling-changes-and-their-real-savings">Polling changes and their real savings</h2>
+<p>Use the <a href="../patterns/go/durable-index-jobs-with-idle-workers.md">durable queue with idle workers recipe</a>. A durable job row is the truth; an in-memory wake signal is a latency optimization. Wake only after the enqueue commits. Reconcile on startup and on a bounded slow timer so a crash or missed signal cannot lose work. Preserve concurrent claims, delayed retries, lease expiry and tenant boundaries.</p>
+<p>Do not promise zero idle compute with periodic reconciliation. With a five-minute suspend delay:</p>
+<table>
+<thead>
+<tr>
+<th>Empty-queue reconciliation</th>
+<th style="text-align: right;">Approximate baseline awake time from checks alone</th>
+<th style="text-align: right;">0.5 CU compute + 20 GB storage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Every 15 minutes</td>
+<td style="text-align: right;">8 hours/day; 240 hours in 30 days</td>
+<td style="text-align: right;">$19.72/month</td>
+</tr>
+<tr>
+<td>Every 60 minutes</td>
+<td style="text-align: right;">2 hours/day; 60 hours in 30 days</td>
+<td style="text-align: right;">$10.18/month</td>
+</tr>
+<tr>
+<td>Every 2 seconds</td>
+<td style="text-align: right;">Continuously awake</td>
+<td style="text-align: right;">$45.69/month using 730 hours</td>
+</tr>
+</tbody>
+</table>
+<p>These estimates assume short checks and successful suspend; user traffic, backups and actual jobs add time or overlap existing awake windows. Avoid a five-minute sweep on a five-minute suspend service: it can prevent sleep entirely. A slower safety sweep saves money but increases worst-case recovery delay after a missed wake. A 15-minute sweep is the initial proposed reliability setting; 60 minutes is an optional trade-off, not an approved default.</p>
+<p>LISTEN/NOTIFY is useful for some always-on PostgreSQL deployments, but notifications are not durable work. It also introduces a persistent connection whose compatibility with actual provider suspension must be verified. Do not assume replacing SQL polling with LISTEN guarantees sleep. <a href="https://www.postgresql.org/docs/current/sql-notify.html">PostgreSQL notification semantics</a>.</p>
+<p>Inspect the entire system: connection pools, readiness probes, uptime checks, scheduled backups, trash maintenance, front-end refresh and integrating agents. Provider metrics and a no-traffic observation window must prove actual suspension. Less polling on Railway/Hetzner improves efficiency, but it does not eliminate their running-server or resident-memory charges.</p>
+<h2 id="choice-and-implementation-gates">Choice and implementation gates</h2>
+<ol>
+<li>Establish data recovery and a verified current backup before provider cutover.</li>
+<li>Implement and test the provider-neutral idle-worker change separately from migration and re-chunking.</li>
+<li>Measure actual awake hours, resource use, p95 latency and queue delays with real traffic.</li>
+<li>If selecting Hetzner, verify stock/region and restore, patch, network, monitoring and responder arrangements. If selecting Neon, prove sleep and cold-start acceptance.</li>
+<li>Rehearse an isolated migration preserving identities, versions, citations and source files. Cut over with one authoritative writer and a tested rollback boundary.</li>
+</ol>
+<p>No runtime implementation, cloud capacity, availability, restore test or cost saving is certified by this document. Earlier related research: the Galing Go-template <code>references/database-hosting.md</code> (17 September 2026), which measured unintended keepalive costs in other applications, and the local Railway release recipe. Those observations inform the method, not the current app's bill.</p></main></body></html>
