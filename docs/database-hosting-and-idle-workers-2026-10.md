@@ -111,6 +111,8 @@ Do not promise zero idle compute with periodic reconciliation. With a five-minut
 
 These estimates assume short checks and successful suspend; user traffic, backups and actual jobs add time or overlap existing awake windows. Avoid a five-minute sweep on a five-minute suspend service: it can prevent sleep entirely. A slower safety sweep saves money but increases worst-case recovery delay after a missed wake. A 15-minute sweep is the initial proposed reliability setting; 60 minutes is an optional trade-off, not an approved default.
 
+Implementation detail from the first application of this recipe: downward jitter makes the default interval 13.5–15 minutes, so the theoretical sweep-only range is closer to **240–267 awake hours per 30-day month**, or **$19.72–21.13** at 0.5 CU and 20 GB. The interactive graph's 240-hour default is the lower edge of that range; adjust awake hours to explore it. This is not measured provider usage or a deployment claim.
+
 LISTEN/NOTIFY is useful for some always-on PostgreSQL deployments, but notifications are not durable work. It also introduces a persistent connection whose compatibility with actual provider suspension must be verified. Do not assume replacing SQL polling with LISTEN guarantees sleep. [PostgreSQL notification semantics](https://www.postgresql.org/docs/current/sql-notify.html).
 
 Inspect the entire system: connection pools, readiness probes, uptime checks, scheduled backups, trash maintenance, front-end refresh and integrating agents. Provider metrics and a no-traffic observation window must prove actual suspension. Less polling on Railway/Hetzner improves efficiency, but it does not eliminate their running-server or resident-memory charges.
