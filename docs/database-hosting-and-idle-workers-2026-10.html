@@ -1,6 +1,113 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PostgreSQL hosting and idle-worker cost guide</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f1ec;color:#21313b;font:17px/1.68 system-ui,sans-serif}main{max-width:1150px;margin:32px auto;background:#fff;padding:48px 58px;border:1px solid #dadeda;border-radius:14px}h1{font-size:2.45rem;line-height:1.14;letter-spacing:-.035em}h2{font-size:1.5rem;margin-top:2.5em;padding-top:.5em;border-top:1px solid #dbe2e4}h3{font-size:1.13rem;margin-top:1.8em}a{color:#12607a;text-underline-offset:3px}table{border-collapse:collapse;display:block;overflow:auto;width:100%;font-size:.88rem;line-height:1.5;margin:24px 0}th,td{padding:13px 15px;border-bottom:1px solid #dce3e5;text-align:left;vertical-align:top}th{background:#e8f0f1}tr:nth-child(even) td{background:#f7f9f9}code{font-size:.88em;overflow-wrap:anywhere}pre{white-space:pre-wrap;background:#edf1f3;padding:18px}li{margin:.5em 0}.toc{padding:14px 24px;background:#f1f5f4;border-radius:8px;font-size:.9rem}.toc ul{padding-left:20px}.toc li{margin:.15em 0}.note{color:#58717b;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}@media(max-width:720px){main{padding:24px;margin:0;border:0;border-radius:0}h1{font-size:1.9rem}th,td{padding:10px}}@media(prefers-color-scheme:dark){body{background:#121b21;color:#e0e9ed}main{background:#1d2a32;border-color:#3c515d}a{color:#89d3e5}h2,th,td{border-color:#435760}th,.toc,pre{background:#283e46}tr:nth-child(even) td{background:#24333c}.note{color:#a4bbc6}}@media print{body,main{background:white;color:black}main{margin:0;padding:0;border:0;max-width:none}.toc{display:none}a{color:inherit}table{display:table;font-size:10pt}h2{break-after:avoid}}</style></head><body><main><p class="note">Research and implementation planning · 3 October 2026 · Not deployed</p><h1 id="postgresql-hosting-and-idle-worker-cost-guide">PostgreSQL hosting and idle-worker cost guide</h1>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PostgreSQL hosting and idle-worker cost guide</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f3f1ec;color:#21313b;font:17px/1.65 system-ui,sans-serif}main{max-width:1180px;margin:28px auto;background:#fff;padding:44px 52px;border:1px solid #d9deda;border-radius:14px}h1{font-size:2.4rem;line-height:1.14;letter-spacing:-.035em}h2{font-size:1.5rem;margin-top:2.4em;padding-top:.5em;border-top:1px solid #dbe2e4}h3{font-size:1.12rem}a{color:#12607a;text-underline-offset:3px}table{border-collapse:collapse;display:block;overflow:auto;width:100%;font-size:.88rem;margin:24px 0}th,td{padding:12px;border-bottom:1px solid #dce3e5;text-align:left;vertical-align:top}th{background:#e8f0f1}code{font-size:.88em;overflow-wrap:anywhere}li{margin:.5em 0}.toc{padding:12px 24px;background:#f1f5f4;border-radius:8px;font-size:.9rem}.toc li{margin:.1em 0}.note,.caption{font-size:.86rem;color:#4e6570}.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px;background:#edf3f3;border-radius:8px}.controls label{font-size:.9rem;font-weight:600}.controls input,.controls select{display:block;width:100%;min-height:44px;margin-top:6px;padding:6px;font:inherit;color:inherit;background:var(--control,#fff);border:1px solid #728c98;border-radius:5px}input[type=range]{padding:0}input:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #217ba0;outline-offset:3px}.chart-wrap{overflow:auto}.chart-wrap svg{width:100%;min-width:600px;display:block}.grid{stroke:#cbd6db;stroke-width:1}.axis{fill:currentColor;font-size:14px}.label{fill:currentColor;font-size:16px}.selection{stroke:currentColor}.legend{display:flex;flex-wrap:wrap;gap:10px 20px;font-size:.87rem}.legend span{display:inline-flex;align-items:center;gap:8px}.legend svg{width:40px;height:12px}#break-even{padding:14px 18px;border-left:4px solid #278e81;background:#edf5f2;font-weight:600}summary{cursor:pointer;padding:10px;min-height:44px}details table{margin-top:0}@media(max-width:760px){main{margin:0;padding:22px;border:0;border-radius:0}h1{font-size:1.9rem}.controls{grid-template-columns:1fr 1fr;padding:14px}.chart-wrap{border:1px solid #dce3e5}}@media(prefers-color-scheme:dark){body{background:#121b21;color:#e0e9ed}main{background:#1d2a32;border-color:#3c515d}a{color:#89d3e5}h2,th,td{border-color:#435760}th,.toc,.controls{background:#283e46;--control:#20343e}.note,.caption{color:#b5c9d1}.grid{stroke:#435760}#break-even{background:#243b36}}@media print{body,main{background:white;color:black}main{padding:0;margin:0;border:0;max-width:none}.toc,.controls{display:none}.chart-wrap svg{min-width:0}table{display:table;font-size:9pt}h2,h3{break-after:avoid}.chart-wrap{break-inside:avoid}a{color:inherit}}
+</style></head><body><main><p class="note">Hosting research · 3 October 2026 · Estimates, not measured bills</p><h1 id="postgresql-hosting-and-idle-worker-cost-guide">PostgreSQL hosting and idle-worker cost guide</h1>
 <p>[TOC]
 Research date: 3 October 2026 UTC. Proposal, not a deployed or benchmarked architecture. All prices below are USD before taxes. No server, subscription or migration has been purchased by this research.</p>
+<h2 id="visual-cost-explorer">Visual cost explorer</h2>
+<p>The HTML edition includes a cost bar chart, an awake-hours break-even graph and adjustable assumptions. These are infrastructure scenarios, not measured performance equivalents. The table below remains the readable source when scripts are disabled.</p>
+
+<section aria-label="Interactive infrastructure cost comparison">
+<div class="controls">
+<label for="storage">Database storage (GB)<select id="storage"><option>10</option><option selected>20</option><option>40</option><option>60</option><option>80</option><option>100</option></select></label>
+<label for="compute">Neon compute while awake<select id="compute"><option value="0.25">0.25 CU</option><option value="0.5" selected>0.5 CU</option><option value="1">1 CU</option><option value="2">2 CU</option></select></label>
+<label for="ram">Railway average RAM<select id="ram"><option value="1">1 GB</option><option value="2" selected>2 GB</option><option value="4">4 GB</option><option value="8">8 GB</option></select></label>
+<label for="awake">Awake time: <output id="awake-value" for="awake">240 h/month</output><input id="awake" type="range" min="0" max="730" value="240" step="1"></label>
+</div>
+<p class="caption">Default: 20 GB, Neon 0.5 CU and 240 awake hours, Railway 2 GB RAM and 0.1 average vCPU. Database infrastructure only. No performance equivalence, tax, application hosting, independent backup, traffic overage or labor included. Hetzner includes IPv4 + server backup; other backup charges vary.</p>
+<h3>1. Monthly cost at the selected usage</h3>
+<div class="chart-wrap"><svg id="cost-bars" role="img" aria-label="Monthly infrastructure cost bar chart"></svg></div>
+<details><summary>Exact chart values (accessible data table)</summary><table><thead><tr><th scope="col">Configuration</th><th scope="col">USD/month</th></tr></thead><tbody id="scenario-values"></tbody></table></details>
+<h3>2. When does a fixed server become cheaper?</h3>
+<div class="chart-wrap"><svg id="cost-lines" role="img" aria-label="Cost against database awake hours"></svg></div>
+<div class="legend" aria-label="Line styles"><span><svg aria-hidden="true"><path d="M0 6H40" stroke="#278e81" stroke-width="3"/></svg>Hetzner EU</span><span><svg aria-hidden="true"><path d="M0 6H40" stroke="#377cdd" stroke-width="3"/></svg>Neon</span><span><svg aria-hidden="true"><path d="M0 6H40" stroke="#9a73bc" stroke-width="3" stroke-dasharray="7 4"/></svg>Railway example</span><span><svg aria-hidden="true"><path d="M0 6H40" stroke="#c57621" stroke-width="3" stroke-dasharray="3 4"/></svg>Hetzner US</span><span><svg aria-hidden="true"><path d="M0 6H40" stroke="#cc667d" stroke-width="3" stroke-dasharray="12 4 3 4"/></svg>RDS medium</span></div>
+<p class="caption">Only Neon's awake hours vary on this graph. Railway's line holds average CPU/RAM fixed—it is not a fixed-price service. RDS and Hetzner hold the chosen instance/server capacity fixed. All hours include users, agents, indexing and maintenance.</p>
+<p id="break-even" aria-live="polite"></p><p id="capacity-note" class="caption"></p>
+<noscript><p>Interactive charts require JavaScript. The monthly comparison, crossover explanation and matrix below contain the same default assumptions and prices.</p></noscript>
+</section>
+
+
+<p>At 20 GB and 0.5 Neon CU, European Hetzner's $12.59 crosses Neon's bill at about <strong>105 awake hours/month</strong> (3.5 hours/day in a 30-day model). US Hetzner's $45.59 crosses it at about <strong>728 hours/month</strong>, almost continuously awake. At 1 Neon CU, the US crossover is about <strong>364 hours/month</strong>. This is why CPX21 is not automatically cheaper than a sleeping Neon database.</p>
+<p>Against our $25 Railway resource example, US CPX21 at $45.59 is more expensive. Railway can exceed it as RAM/CPU/storage usage increases: at 20 GB storage and 0.1 average vCPU, the arithmetic crosses near 4.06 GB average RAM. These are price intersections, not claims of equal capacity or measured workloads.</p>
+<h2 id="comparison-matrix">Comparison matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Railway PostgreSQL</th>
+<th>Neon Launch</th>
+<th>AWS RDS PostgreSQL</th>
+<th>Hetzner self-managed PostgreSQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cost predictability</td>
+<td>Metered RAM/CPU/disk; workspace minimum</td>
+<td>Depends on awake compute and storage</td>
+<td>Selected instance/storage predictable; extras vary</td>
+<td>Selected VM has monthly cap; extras vary</td>
+</tr>
+<tr>
+<td>Idle savings</td>
+<td>CPU may fall; resident RAM/disk still charged</td>
+<td>Can suspend compute when genuinely idle</td>
+<td>Ordinary instance keeps billing while running</td>
+<td>VM keeps billing even when powered off</td>
+</tr>
+<tr>
+<td>Who administers PostgreSQL?</td>
+<td>Application operator manages database lifecycle; platform runs containers/volumes</td>
+<td>Provider manages database infrastructure; app still owns schema/access</td>
+<td>AWS manages database infrastructure; app configures operation/access</td>
+<td>We administer OS, PostgreSQL, pgvector and recovery</td>
+</tr>
+<tr>
+<td>Storage growth</td>
+<td>Expand volume within plan limits; usage billed</td>
+<td>Database storage grows and is billed</td>
+<td>Provisioned storage; optional configured autoscaling</td>
+<td>Finite VM disk; expand/migrate or add charged storage</td>
+</tr>
+<tr>
+<td>Recovery requirement</td>
+<td>Configure and test backup of DB plus originals</td>
+<td>Configure restore history plus independent backups/originals</td>
+<td>Configure backup/PITR plus originals; test restore</td>
+<td>Build and test DB-aware off-server backup; VM snapshots alone insufficient</td>
+</tr>
+<tr>
+<td>Single-instance failure</td>
+<td>No automatic database HA assumed</td>
+<td>Provider-managed design; check selected plan/SLA</td>
+<td>Table prices are Single-AZ, not Multi-AZ</td>
+<td>One VM has no automatic PostgreSQL failover</td>
+</tr>
+<tr>
+<td>Location issue</td>
+<td>Prefer same region/private app network</td>
+<td>Match application region</td>
+<td>Cross-provider VPC/network design if app remains elsewhere</td>
+<td>Cheap CX quote is Europe; US plans cost more; measure latency</td>
+</tr>
+<tr>
+<td>Polling-fix benefit</td>
+<td>Fewer queries/CPU; not zero idle bill</td>
+<td>Enables actual compute sleep if other clients permit</td>
+<td>Less load; not automatic instance cost reduction</td>
+<td>Less load/more headroom; unchanged base VM price</td>
+</tr>
+<tr>
+<td>Best reason to choose</td>
+<td>Existing topology and simpler incident recovery</td>
+<td>Managed operations with intermittent traffic</td>
+<td>AWS requirements and managed recovery options</td>
+<td>Predictable low base price with accepted operational ownership</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-fixed-cost-doesand-does-notmean">What fixed cost does—and does not—mean</h2>
+<p>Hetzner caps the charge for the chosen VM at its published monthly price. It does not charge more VM rent because PostgreSQL runs more queries. The machine still has finite CPU, RAM and disk: load can slow it down or exhaust capacity, requiring an intentional upgrade. Independent backup storage, extra volumes/snapshots/IPs, traffic beyond the allowance and additional servers can add charges. Provider prices can also change; the June 2026 revision is a concrete example.</p>
+<p>For European CX33, $12.59 here already includes one IPv4 and the 20% server-backup option, <strong>not</strong> independent PostgreSQL backups, application hosting, tax or operational labor. Billing alerts do not impose a hard spending cap. Keep disk, CPU, memory and traffic monitoring even on a fixed-price VM. <a href="https://docs.hetzner.com/cloud/billing/faq/">Hetzner billing terms</a>.</p>
 <h2 id="recommendation">Recommendation</h2>
 <p>For an intermittently used knowledge application, compare <strong>Neon with workers that can sleep</strong> against <strong>a self-managed Hetzner server</strong>. Choose Railway when staying with the existing deployment and operational simplicity matters more than a modest possible saving. RDS becomes more attractive when AWS networking, managed recovery and availability requirements justify its larger operational footprint.</p>
 <p>Hetzner can be the lowest predictable infrastructure bill, particularly in Europe. It transfers database administration to the application operator. Neon reduces that maintenance responsibility, but continuous application traffic can erase its idle-compute savings. There is no unconditional cheapest provider.</p>
@@ -117,4 +224,72 @@ Research date: 3 October 2026 UTC. Proposal, not a deployed or benchmarked archi
 <li>If selecting Hetzner, verify stock/region and restore, patch, network, monitoring and responder arrangements. If selecting Neon, prove sleep and cold-start acceptance.</li>
 <li>Rehearse an isolated migration preserving identities, versions, citations and source files. Cut over with one authoritative writer and a tested rollback boundary.</li>
 </ol>
-<p>No runtime implementation, cloud capacity, availability, restore test or cost saving is certified by this document. Earlier related research: the Galing Go-template <code>references/database-hosting.md</code> (17 September 2026), which measured unintended keepalive costs in other applications, and the local Railway release recipe. Those observations inform the method, not the current app's bill.</p></main></body></html>
+<p>No runtime implementation, cloud capacity, availability, restore test or cost saving is certified by this document. Earlier related research: the Galing Go-template <code>references/database-hosting.md</code> (17 September 2026), which measured unintended keepalive costs in other applications, and the local Railway release recipe. Those observations inform the method, not the current app's bill.</p></main><script>/* Offline cost explorer. Provider rates checked 2026-10-03; no network requests. */
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const ns = 'http://www.w3.org/2000/svg';
+  const money = n => '$' + n.toFixed(2);
+  const controls = ['storage','compute','awake','ram'];
+  const read = () => ({ storage: +$('storage').value, compute: +$('compute').value, awake: +$('awake').value, ram: +$('ram').value });
+  function models(p) {
+    return [
+      {name:'Hetzner EU · CX33*', value:9.99*1.2+.60, color:'#278e81', dash:'', fn:()=>9.99*1.2+.60},
+      {name:'Neon Launch', value:p.storage*.35+p.compute*.106*p.awake, color:'#377cdd', dash:'', fn:h=>p.storage*.35+p.compute*.106*h},
+      {name:'Railway example†', value:Math.max(20,p.ram*10+2+p.storage*.15), color:'#9a73bc', dash:'7 4', fn:()=>Math.max(20,p.ram*10+2+p.storage*.15)},
+      {name:'Hetzner US · CPX21', value:37.49*1.2+.60, color:'#c57621', dash:'3 4', fn:()=>37.49*1.2+.60},
+      {name:'RDS medium · Single-AZ', value:.065*730+Math.max(20,p.storage)*.115, color:'#cc667d', dash:'12 4 3 4', fn:()=>.065*730+Math.max(20,p.storage)*.115}
+    ];
+  }
+  function el(tag, attrs, text) {
+    const node=document.createElementNS(ns,tag);
+    Object.entries(attrs||{}).forEach(([k,v])=>node.setAttribute(k,String(v)));
+    if(text!==undefined) node.textContent=String(text);
+    return node;
+  }
+  function chart(id, title, desc, height) {
+    const svg=$(id); svg.replaceChildren(); svg.setAttribute('viewBox',`0 0 900 ${height}`);
+    svg.append(el('title',{},title),el('desc',{},desc)); return svg;
+  }
+  function render() {
+    const p=read(), rows=models(p), max=Math.ceil(Math.max(...rows.map(r=>r.value))/10)*10;
+    $('awake-value').textContent=p.awake+' h/month';
+    const bar=chart('cost-bars','Monthly infrastructure cost under selected assumptions','Dollar values are also listed in the table below. Plans are not performance-equivalent.',355);
+    const ordered=[...rows].sort((a,b)=>b.value-a.value);
+    for(let i=0;i<=4;i++) {
+      const x=250+i*540/4;
+      bar.append(el('line',{x1:x,y1:20,x2:x,y2:315,class:'grid'}),el('text',{x,y:342,'text-anchor':'middle',class:'axis'},money(max*i/4)));
+    }
+    ordered.forEach((r,i)=>{
+      const y=32+i*56;
+      bar.append(el('text',{x:238,y:y+23,'text-anchor':'end',class:'label'},r.name));
+      const rect=el('rect',{x:250,y,width:r.value/max*540,height:34,rx:4,fill:r.color});
+      rect.append(el('title',{},r.name+': '+money(r.value))); bar.append(rect);
+      bar.append(el('text',{x:260+r.value/max*540,y:y+23,class:'label'},money(r.value)));
+    });
+    const line=chart('cost-lines','Monthly cost against database awake hours','Neon rises with awake hours. Other lines hold their selected capacity and usage assumptions fixed. Dashed patterns and a legend distinguish providers.',395);
+    const ymax=Math.ceil(Math.max(...rows.map(r=>r.fn(730)))/10)*10;
+    const X=h=>65+h/730*800, Y=v=>330-v/ymax*295;
+    for(let i=0;i<=5;i++) {
+      const v=ymax*i/5,y=Y(v);
+      line.append(el('line',{x1:65,y1:y,x2:865,y2:y,class:'grid'}),el('text',{x:55,y:y+5,'text-anchor':'end',class:'axis'},'$'+v.toFixed(0)));
+    }
+    for(const h of [0,120,240,360,480,600,730]) line.append(el('text',{x:X(h),y:354,'text-anchor':'middle',class:'axis'},h));
+    rows.forEach(r=>line.append(el('path',{d:`M${X(0)},${Y(r.fn(0))} L${X(730)},${Y(r.fn(730))}`,fill:'none',stroke:r.color,'stroke-width':3,'stroke-dasharray':r.dash})));
+    line.append(el('line',{x1:X(p.awake),x2:X(p.awake),y1:30,y2:330,class:'selection','stroke-dasharray':'2 5'}),el('text',{x:465,y:384,'text-anchor':'middle',class:'axis'},'Database awake hours per month (all clients and maintenance)'));
+    const tbody=$('scenario-values'); tbody.replaceChildren();
+    ordered.forEach(r=>{const tr=document.createElement('tr');for(const text of [r.name,money(r.value)]) {const td=document.createElement('td');td.textContent=text;tr.append(td);}tbody.append(tr);});
+    const crossings=rows.filter(r=>r.name.startsWith('Hetzner')).map(r=>{
+      const h=(r.value-p.storage*.35)/(p.compute*.106);
+      const result=h<0?'cheaper than Neon storage alone':h>730?'no crossing within 730 hours':`Neon matches at ${h.toFixed(0)} awake hours/month`;
+      return r.name+': '+result+'.';
+    });
+    $('break-even').textContent=crossings.join(' ');
+    $('capacity-note').textContent=p.storage>=60?'Capacity warning: quoted server disks also need OS, WAL, indexes and working headroom. At this setting the Hetzner flat lines are not viable capacity quotes without sizing review; larger-server costs are excluded.':'* EU CX33 availability unverified; public page showed unavailable. Its 80 GB disk includes OS and working space. † Railway assumes 0.1 average vCPU and applies a $20 sole-workspace floor; do not allocate that floor twice when other services already cover it.';
+  }
+  controls.forEach(id=>$(id).addEventListener('input',render));
+  render();
+  // Pure calculations exposed only for local regression checks; contains no private data.
+  window.hostingCostModels=models;
+})();
+</script></body></html>

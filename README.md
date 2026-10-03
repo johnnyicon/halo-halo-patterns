@@ -32,6 +32,8 @@ Recent database guidance:
 - [PostgreSQL hosting and idle-worker cost guide](docs/database-hosting-and-idle-workers-2026-10.md) — Railway, Neon, AWS and Hetzner, with explicit cost assumptions and operational trade-offs. [Readable HTML](docs/database-hosting-and-idle-workers-2026-10.html).
 - [Durable PostgreSQL jobs with idle workers](patterns/go/durable-index-jobs-with-idle-workers.md) — draft implementation recipe for post-commit wakes, retries and bounded recovery.
 
+The hosting HTML includes an offline cost explorer and comparison matrix. Rebuild it with `python3 scripts/render-database-hosting-report.py` (optional Python `markdown` package required). It makes no network requests; editable assumptions do not provision infrastructure.
+
 Halo-Halo includes a health check system to ensure patterns stay current and reliable.
 
 ### Running Health Checks

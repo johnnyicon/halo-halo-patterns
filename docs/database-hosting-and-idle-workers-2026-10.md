@@ -2,6 +2,36 @@
 
 Research date: 3 October 2026 UTC. Proposal, not a deployed or benchmarked architecture. All prices below are USD before taxes. No server, subscription or migration has been purchased by this research.
 
+## Visual cost explorer
+
+The HTML edition includes a cost bar chart, an awake-hours break-even graph and adjustable assumptions. These are infrastructure scenarios, not measured performance equivalents. The table below remains the readable source when scripts are disabled.
+
+<!-- hosting-cost-explorer -->
+
+At 20 GB and 0.5 Neon CU, European Hetzner's $12.59 crosses Neon's bill at about **105 awake hours/month** (3.5 hours/day in a 30-day model). US Hetzner's $45.59 crosses it at about **728 hours/month**, almost continuously awake. At 1 Neon CU, the US crossover is about **364 hours/month**. This is why CPX21 is not automatically cheaper than a sleeping Neon database.
+
+Against our $25 Railway resource example, US CPX21 at $45.59 is more expensive. Railway can exceed it as RAM/CPU/storage usage increases: at 20 GB storage and 0.1 average vCPU, the arithmetic crosses near 4.06 GB average RAM. These are price intersections, not claims of equal capacity or measured workloads.
+
+## Comparison matrix
+
+| Decision | Railway PostgreSQL | Neon Launch | AWS RDS PostgreSQL | Hetzner self-managed PostgreSQL |
+| --- | --- | --- | --- | --- |
+| Cost predictability | Metered RAM/CPU/disk; workspace minimum | Depends on awake compute and storage | Selected instance/storage predictable; extras vary | Selected VM has monthly cap; extras vary |
+| Idle savings | CPU may fall; resident RAM/disk still charged | Can suspend compute when genuinely idle | Ordinary instance keeps billing while running | VM keeps billing even when powered off |
+| Who administers PostgreSQL? | Application operator manages database lifecycle; platform runs containers/volumes | Provider manages database infrastructure; app still owns schema/access | AWS manages database infrastructure; app configures operation/access | We administer OS, PostgreSQL, pgvector and recovery |
+| Storage growth | Expand volume within plan limits; usage billed | Database storage grows and is billed | Provisioned storage; optional configured autoscaling | Finite VM disk; expand/migrate or add charged storage |
+| Recovery requirement | Configure and test backup of DB plus originals | Configure restore history plus independent backups/originals | Configure backup/PITR plus originals; test restore | Build and test DB-aware off-server backup; VM snapshots alone insufficient |
+| Single-instance failure | No automatic database HA assumed | Provider-managed design; check selected plan/SLA | Table prices are Single-AZ, not Multi-AZ | One VM has no automatic PostgreSQL failover |
+| Location issue | Prefer same region/private app network | Match application region | Cross-provider VPC/network design if app remains elsewhere | Cheap CX quote is Europe; US plans cost more; measure latency |
+| Polling-fix benefit | Fewer queries/CPU; not zero idle bill | Enables actual compute sleep if other clients permit | Less load; not automatic instance cost reduction | Less load/more headroom; unchanged base VM price |
+| Best reason to choose | Existing topology and simpler incident recovery | Managed operations with intermittent traffic | AWS requirements and managed recovery options | Predictable low base price with accepted operational ownership |
+
+## What fixed cost does—and does not—mean
+
+Hetzner caps the charge for the chosen VM at its published monthly price. It does not charge more VM rent because PostgreSQL runs more queries. The machine still has finite CPU, RAM and disk: load can slow it down or exhaust capacity, requiring an intentional upgrade. Independent backup storage, extra volumes/snapshots/IPs, traffic beyond the allowance and additional servers can add charges. Provider prices can also change; the June 2026 revision is a concrete example.
+
+For European CX33, $12.59 here already includes one IPv4 and the 20% server-backup option, **not** independent PostgreSQL backups, application hosting, tax or operational labor. Billing alerts do not impose a hard spending cap. Keep disk, CPU, memory and traffic monitoring even on a fixed-price VM. [Hetzner billing terms](https://docs.hetzner.com/cloud/billing/faq/).
+
 ## Recommendation
 
 For an intermittently used knowledge application, compare **Neon with workers that can sleep** against **a self-managed Hetzner server**. Choose Railway when staying with the existing deployment and operational simplicity matters more than a modest possible saving. RDS becomes more attractive when AWS networking, managed recovery and availability requirements justify its larger operational footprint.
