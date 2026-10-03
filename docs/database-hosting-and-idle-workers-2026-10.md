@@ -12,6 +12,8 @@ At 20 GB and 0.5 Neon CU, European Hetzner's $12.59 crosses Neon's bill at about
 
 Against our $25 Railway resource example, US CPX21 at $45.59 is more expensive. Railway can exceed it as RAM/CPU/storage usage increases: at 20 GB storage and 0.1 average vCPU, the arithmetic crosses near 4.06 GB average RAM. These are price intersections, not claims of equal capacity or measured workloads.
 
+At the default examples, European Hetzner saves about $7.13/month versus the $19.72 Neon case, or $12.41/month versus $25 Railway, before independent backups and operational effort. Its main attraction is the base price remaining steady as queries increase within the machine's capacity. Do not overlook administration for a small nominal saving. Sharing one server across applications can spread its cost but needs separate roles/databases, resource limits and an explicit shared-failure decision; it is not assumed in these single-database figures.
+
 ## Comparison matrix
 
 | Decision | Railway PostgreSQL | Neon Launch | AWS RDS PostgreSQL | Hetzner self-managed PostgreSQL |
