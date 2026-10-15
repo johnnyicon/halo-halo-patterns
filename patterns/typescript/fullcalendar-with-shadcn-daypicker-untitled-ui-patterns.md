@@ -59,7 +59,8 @@ maintainers:
 
 deprecated_date: null
 superseded_by: null
-related: []
+related:
+  - fullcalendar-v7-phone-month-fold-and-day-drawer
 sanitized: true
 migration_note: null
 notes: "Recipe based on the calendar-library evaluation dated 2026-09-07. FullCalendar owns event layout; shadcn/ui and React DayPicker own date inputs; Untitled UI and React Aria guide surrounding presentation and accessible custom controls."
