@@ -25,6 +25,11 @@ A collection of reusable patterns, troubleshooting guides, and debugging cases t
 
 See [`docs/INSTALL.md`](docs/INSTALL.md) for setup instructions.
 
+## Agent environment case studies
+
+See [agent environments: evidence and case studies](docs/agent-harnesses/README.md)
+for preliminary research on coding-agent outcomes, budgets and verification.
+
 ## Catalog Maintenance
 
 Recent database guidance:
