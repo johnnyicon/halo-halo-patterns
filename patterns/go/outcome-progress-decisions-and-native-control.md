@@ -4,17 +4,17 @@ title: Outcome Progress, Durable Decisions and Native Agent Control
 type: architecture
 status: draft
 confidence: low
-revision: 1
+revision: 2
 languages: [go, typescript, sql]
 frameworks:
   - name: Gomanan with native coding-agent adapters
-    version: "Partial implementation; end-to-end decision and control proof pending"
+    version: "Forge decision and supported Codex active-control journeys verified; human chat answer pending"
     ecosystem: other
 domain: state-management
 tags: [agents, outcomes, decisions, scope, cancellation, idempotency]
 introduced: "2026-11-10"
-last_verified: "2026-11-10"
-review_by: "2026-12-10"
+last_verified: "2026-11-11"
+review_by: "2026-12-11"
 maintainers: []
 sanitized: true
 related: []
@@ -32,15 +32,53 @@ and [delivery plan](https://github.com/johnnyicon/maykapal-os/blob/main/docs/pla
 retain the evidence and current acceptance state. The reusable execution
 procedure belongs in [Galing Skills](https://github.com/johnnyicon/galing-skills/blob/main/skills/deliver-approved-outcome/SKILL.md).
 
-| Capability | Evidence reviewed on November 10, 2026 | Limit |
+| Capability | Evidence reviewed on November 11, 2026 | Limit |
 |---|---|---|
 | Outcome progress | Gomanan plan view demonstrated using actual Upstate records, with partial evidence and remaining gaps | Does not make the Upstate application complete |
-| Durable scope decisions | Backend and task UI implemented; stale/conflicting/duplicate cases have focused tests | Actual chat and task-screen answer-to-continuation journey is still being completed |
+| Durable scope decisions | Actual Forge answer reached registered Codex, which completed the matching action; saved, delivered and acted states verified in Forge. Identical answer retry preserved the record; conflicting and stale replies were rejected; duplicate delivery did not create another turn or rewrite the result | Forge answer was agent-operated testing on explicit owner instruction. An actual human answer through the native chat form remains unproven |
 | Outcome observation | Live work creation reads saved plan scope and stores a visible finding; deployed task drawer checked at release `02be93e53` | Observation is advisory; caller rationale is explicitly unverified |
-| Stop and redirect | Real JetStream cancellation terminates parent and child processes; stopped queues refuse launch; rejected Codex interruption no longer reports success | Registered native active-turn stop/redirect integration is still being completed |
+| Stop and redirect | Supported registered Codex active turn received a redirect, produced the redirected result, then was interrupted; forbidden original and after-stop results were absent. Earlier JetStream cancellation also terminated parent and child processes and prevented stopped queued work launching | Controlled installed-Codex proof, not a claim that all native hosts or arbitrary descendants support these controls |
 
 Do not promote this recipe to validated until the outstanding journeys below
 have been exercised against the installed integrations and linked here.
+
+### Recorded integration evidence
+
+The [stage-two decision record](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1b6f7-bbcb-750a-a4fa-f2a0c51f89f5)
+contains the Forge evidence and the unfinished native human-answer requirement.
+Its [controlled decision task](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1c835-ba48-7a0c-85ef-e7c891b39ea1)
+shows the saved choice, verified delivery and evidence-backed action. These are
+private workspace links; the public case study and plan above retain context.
+
+The Forge test used one setup turn and one actual continuation. Codex read the
+saved choice and wrote the matching result. A repeated delivery returned the
+existing result; the native turn count and result file were unchanged. The
+initial attempt failed before starting work; its failed record was retained.
+When a later completed turn was initially reported as uncertain, recovery read
+the actual provider record and verified the exact thread, turn, original input
+and start time. It did not resend work or fabricate completion events. Where
+no original acceptance timestamp existed, verified completion established the
+conservative delivery timestamp; this did not invent an earlier acceptance.
+
+The hosted Forge screen subsequently displayed all three states. The associated
+release and UI test were submitted by agents on the owner's explicit chat
+instruction. They are not evidence of human clicks. No new device, separate
+login or biometric check was required. The remaining human chat-answer test
+must be recorded separately before calling the two-surface decision journey
+complete.
+
+The [stage-three observation and control record](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1b6f7-bc30-79eb-bf13-3e8832494d79)
+contains actual native-control evidence `01a1cb33-9a1f-7d98-9635-ed3508c54bf9`.
+Against Authority `97d6c6d0e` and worker `81e9d43f`, the explicitly enrolled Codex
+session used two turns: setup completed, then the controlled proof turn was
+redirected and interrupted. It wrote `REDIRECTED`; the original and after-stop
+outputs were absent, including a check 117 seconds later. Repeating the original
+action retained delivery attempt one and did not create a third turn. The planned
+child sleep had not launched before interruption, so this proof does **not**
+establish native child-process cancellation. Earlier queue/descendant evidence
+must remain separate. Stage three also remains unfinished: material-scope
+observations are advisory and do not yet automatically create one durable
+decision request.
 
 ## 1. Preserve approved scope separately from work items
 
