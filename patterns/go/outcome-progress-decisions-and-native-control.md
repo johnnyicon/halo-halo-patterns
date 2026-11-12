@@ -4,7 +4,7 @@ title: Outcome Progress, Durable Decisions and Native Agent Control
 type: architecture
 status: draft
 confidence: low
-revision: 2
+revision: 3
 languages: [go, typescript, sql]
 frameworks:
   - name: Gomanan with native coding-agent adapters
@@ -13,7 +13,7 @@ frameworks:
 domain: state-management
 tags: [agents, outcomes, decisions, scope, cancellation, idempotency]
 introduced: "2026-11-10"
-last_verified: "2026-11-11"
+last_verified: "2026-11-12"
 review_by: "2026-12-11"
 maintainers: []
 sanitized: true
@@ -32,11 +32,11 @@ and [delivery plan](https://github.com/johnnyicon/maykapal-os/blob/main/docs/pla
 retain the evidence and current acceptance state. The reusable execution
 procedure belongs in [Galing Skills](https://github.com/johnnyicon/galing-skills/blob/main/skills/deliver-approved-outcome/SKILL.md).
 
-| Capability | Evidence reviewed on November 11, 2026 | Limit |
+| Capability | Evidence reviewed through November 12, 2026 | Limit |
 |---|---|---|
 | Outcome progress | Gomanan plan view demonstrated using actual Upstate records, with partial evidence and remaining gaps | Does not make the Upstate application complete |
 | Durable scope decisions | Actual Forge answer reached registered Codex, which completed the matching action; saved, delivered and acted states verified in Forge. Identical answer retry preserved the record; conflicting and stale replies were rejected; duplicate delivery did not create another turn or rewrite the result | Forge answer was agent-operated testing on explicit owner instruction. An actual human answer through the native chat form remains unproven |
-| Outcome observation | Live work creation reads saved plan scope and stores a visible finding; deployed task drawer checked at release `02be93e53` | Observation is advisory; caller rationale is explicitly unverified |
+| Outcome observation | Live work creation stores a visible finding. On release `2b86ea0fa`, a complete material proposal created one decision on the affected task, and a retry reused it | Uncertain observations stay advisory and caller evidence is explicitly unverified |
 | Stop and redirect | Supported registered Codex active turn received a redirect, produced the redirected result, then was interrupted; forbidden original and after-stop results were absent. Earlier JetStream cancellation also terminated parent and child processes and prevented stopped queued work launching | Controlled installed-Codex proof, not a claim that all native hosts or arbitrary descendants support these controls |
 
 Do not promote this recipe to validated until the outstanding journeys below
@@ -76,9 +76,14 @@ outputs were absent, including a check 117 seconds later. Repeating the original
 action retained delivery attempt one and did not create a third turn. The planned
 child sleep had not launched before interruption, so this proof does **not**
 establish native child-process cancellation. Earlier queue/descendant evidence
-must remain separate. Stage three also remains unfinished: material-scope
-observations are advisory and do not yet automatically create one durable
-decision request.
+must remain separate.
+
+On November 12, the deployed material proposal created a saved decision on a
+controlled draft execution. The same work request reused the task and decision.
+The hosted Forge drawer showed the exact question, evidence, two choices,
+recommendation and waiting work. See the [controlled affected task](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1d121-bb8f-7f1c-81ed-a0eb962725ce).
+No agent turn ran for this check. The direct human answer in Codex and its
+continuation remain separate acceptance work.
 
 ## 1. Preserve approved scope separately from work items
 
