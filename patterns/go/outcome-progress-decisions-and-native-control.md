@@ -4,11 +4,11 @@ title: Outcome Progress, Durable Decisions and Native Agent Control
 type: architecture
 status: draft
 confidence: low
-revision: 3
+revision: 4
 languages: [go, typescript, sql]
 frameworks:
   - name: Gomanan with native coding-agent adapters
-    version: "Forge decision and supported Codex active-control journeys verified; human chat answer pending"
+    version: "Forge and Codex terminal decisions and supported Codex active control verified"
     ecosystem: other
 domain: state-management
 tags: [agents, outcomes, decisions, scope, cancellation, idempotency]
@@ -34,8 +34,8 @@ procedure belongs in [Galing Skills](https://github.com/johnnyicon/galing-skills
 
 | Capability | Evidence reviewed through November 12, 2026 | Limit |
 |---|---|---|
-| Outcome progress | Gomanan plan view demonstrated using actual Upstate records, with partial evidence and remaining gaps | Does not make the Upstate application complete |
-| Durable scope decisions | Actual Forge answer reached registered Codex, which completed the matching action; saved, delivered and acted states verified in Forge. Identical answer retry preserved the record; conflicting and stale replies were rejected; duplicate delivery did not create another turn or rewrite the result | Forge answer was agent-operated testing on explicit owner instruction. An actual human answer through the native chat form remains unproven |
+| Outcome progress | Actual Upstate plan view showed partial progress. The saved build ran with a sourced local catalog, and a two-stop draft survived reopening | The initial natural-language request yielded no planning suggestions, and complete feasibility was unproven |
+| Durable scope decisions | Both an owner-submitted Codex terminal answer and a controlled Forge answer reached their waiting Codex sessions. Forge displayed saved, delivered and acted states. Conflicting and stale replies were rejected; repeating delivery in the Forge test preserved one turn and result | Forge was agent-operated on owner instruction. The Codex test used the terminal inside the desktop app with a shared Mac login |
 | Outcome observation | Live work creation stores a visible finding. On release `2b86ea0fa`, a complete material proposal created one decision on the affected task, and a retry reused it | Uncertain observations stay advisory and caller evidence is explicitly unverified |
 | Stop and redirect | Supported registered Codex active turn received a redirect, produced the redirected result, then was interrupted; forbidden original and after-stop results were absent. Earlier JetStream cancellation also terminated parent and child processes and prevented stopped queued work launching | Controlled installed-Codex proof, not a claim that all native hosts or arbitrary descendants support these controls |
 
@@ -45,7 +45,7 @@ have been exercised against the installed integrations and linked here.
 ### Recorded integration evidence
 
 The [stage-two decision record](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1b6f7-bbcb-750a-a4fa-f2a0c51f89f5)
-contains the Forge evidence and the unfinished native human-answer requirement.
+contains the Forge and owner-submitted Codex answer evidence.
 Its [controlled decision task](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1c835-ba48-7a0c-85ef-e7c891b39ea1)
 shows the saved choice, verified delivery and evidence-backed action. These are
 private workspace links; the public case study and plan above retain context.
@@ -60,12 +60,14 @@ and start time. It did not resend work or fabricate completion events. Where
 no original acceptance timestamp existed, verified completion established the
 conservative delivery timestamp; this did not invent an earlier acceptance.
 
-The hosted Forge screen subsequently displayed all three states. The associated
-release and UI test were submitted by agents on the owner's explicit chat
-instruction. They are not evidence of human clicks. No new device, separate
-login or biometric check was required. The remaining human chat-answer test
-must be recorded separately before calling the two-surface decision journey
-complete.
+The Forge test was agent-operated on the owner's explicit chat instruction.
+For the Codex test, the owner personally selected “Keep the agreed scope” in
+the terminal inside the Codex desktop app. Gomanan saved the choice, one waiting
+turn completed in the original session, and it wrote a result matching the
+decision ID, choice and digest. Forge showed the answer from Chat, delivery and
+action. Delivery initially tried to steer a turn that had finished. A confirmed
+rejection now lets the same request append to the idle thread. Uncertain
+delivery still requires checking what happened before trying again.
 
 The [stage-three observation and control record](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1b6f7-bc30-79eb-bf13-3e8832494d79)
 contains actual native-control evidence `01a1cb33-9a1f-7d98-9635-ed3508c54bf9`.
