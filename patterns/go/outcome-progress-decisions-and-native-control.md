@@ -4,7 +4,7 @@ title: Outcome Progress, Durable Decisions and Native Agent Control
 type: architecture
 status: draft
 confidence: low
-revision: 4
+revision: 5
 languages: [go, typescript, sql]
 frameworks:
   - name: Gomanan with native coding-agent adapters
@@ -13,8 +13,8 @@ frameworks:
 domain: state-management
 tags: [agents, outcomes, decisions, scope, cancellation, idempotency]
 introduced: "2026-11-10"
-last_verified: "2026-11-12"
-review_by: "2026-12-11"
+last_verified: "2026-11-23"
+review_by: "2026-12-23"
 maintainers: []
 sanitized: true
 related: []
@@ -32,15 +32,23 @@ and [delivery plan](https://github.com/johnnyicon/maykapal-os/blob/main/docs/pla
 retain the evidence and current acceptance state. The reusable execution
 procedure belongs in [Galing Skills](https://github.com/johnnyicon/galing-skills/blob/main/skills/deliver-approved-outcome/SKILL.md).
 
-| Capability | Evidence reviewed through November 12, 2026 | Limit |
+| Capability | Recorded evidence reviewed through November 23, 2026 | Limit |
 |---|---|---|
-| Outcome progress | Actual Upstate plan view showed partial progress. The saved build ran with a sourced local catalog, and a two-stop draft survived reopening | The initial natural-language request yielded no planning suggestions, and complete feasibility was unproven |
+| Outcome progress | Actual Upstate plan view separates each requirement, evidence and remaining work. Later app verification corrected request interpretation and proved comparison, refinement, save/reopen, feasibility and explicit feedback. The fresh-account rehearsal now preserves editable original commuter records and untouched archives | The first sample test remains partial historical evidence. Some later checks use illustrative inputs; real venue prices and route estimates are separately identified. No real migration or Upstate production release occurred |
 | Durable scope decisions | Both an owner-submitted Codex terminal answer and a controlled Forge answer reached their waiting Codex sessions. Forge displayed saved, delivered and acted states. Conflicting and stale replies were rejected; repeating delivery in the Forge test preserved one turn and result | Forge was agent-operated on owner instruction. The Codex test used the terminal inside the desktop app with a shared Mac login |
 | Outcome observation | Live work creation stores a visible finding. On release `2b86ea0fa`, a complete material proposal created one decision on the affected task, and a retry reused it | Uncertain observations stay advisory and caller evidence is explicitly unverified |
 | Stop and redirect | Supported registered Codex active turn received a redirect, produced the redirected result, then was interrupted; forbidden original and after-stop results were absent. Earlier JetStream cancellation also terminated parent and child processes and prevented stopped queued work launching | Controlled installed-Codex proof, not a claim that all native hosts or arbitrary descendants support these controls |
 
-Do not promote this recipe to validated until the outstanding journeys below
-have been exercised against the installed integrations and linked here.
+The verified subset can be reused within its stated limits. Draft status covers
+the broader host and descendant coverage still unproved; it does not erase the
+recorded checks. The checklist below applies before claiming a wider integration.
+
+The [Upstate outcome record](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/upstate-commuter/work?open=01a1ada6-67ef-7c24-b535-1a4f50d84622)
+retains the original sample-data limitation and the later sourced and illustrative
+journeys separately. At Upstate revision 33fdd02, disposable database and browser
+checks also proved editable copied plans, trips, experiments and costs, complete
+backup/recovery and unchanged originals. This is implementation evidence, not a
+claim that the owner's real records were migrated.
 
 ### Recorded integration evidence
 
@@ -84,8 +92,9 @@ On November 12, the deployed material proposal created a saved decision on a
 controlled draft execution. The same work request reused the task and decision.
 The hosted Forge drawer showed the exact question, evidence, two choices,
 recommendation and waiting work. See the [controlled affected task](https://gomanan-authority-01.tail75bb1d.ts.net/workspaces/maykapal-os/work?open=01a1d121-bb8f-7f1c-81ed-a0eb962725ce).
-No agent turn ran for this check. The direct human answer in Codex and its
-continuation remain separate acceptance work.
+No agent turn ran for this check. The separately recorded owner-submitted Codex
+answer and continuation complete the first supported chat surface; they do not
+prove every agent host supports that interaction.
 
 ## 1. Preserve approved scope separately from work items
 
