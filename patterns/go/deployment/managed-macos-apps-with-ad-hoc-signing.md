@@ -1,14 +1,17 @@
 ---
 id: "managed-macos-apps-with-ad-hoc-signing"
 title: "Build and install local macOS apps with ad hoc signing"
-type: pattern
+type: implementation
 status: validated
 confidence: high
 revision: 1
 languages:
   - language: any
     versions: "*"
-frameworks: []
+frameworks:
+  - name: macOS application bundles
+    version: "*"
+    ecosystem: other
 dependencies: []
 runtime: ["macos"]
 domain: deployment
