@@ -32,6 +32,8 @@ for preliminary research on coding-agent outcomes, budgets and verification.
 
 ## Catalog Maintenance
 
+[Managed macOS apps with ad hoc signing](patterns/go/deployment/managed-macos-apps-with-ad-hoc-signing.md) covers local builds, bundled helpers, and install verification.
+
 Recent database guidance:
 
 - [PostgreSQL hosting and idle-worker cost guide](docs/database-hosting-and-idle-workers-2026-10.md) — Railway, Neon, AWS and Hetzner, with explicit cost assumptions and operational trade-offs. [Readable HTML](docs/database-hosting-and-idle-workers-2026-10.html).
